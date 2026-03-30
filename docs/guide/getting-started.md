@@ -48,6 +48,17 @@ conoha auth login
 - **Tenant ID**: テナントID
 - **Region**: tyo3 (東京)
 
+実行例:
+
+```
+$ conoha auth login
+Tenant ID: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4
+API Username: gncu12345678
+API Password: *********************
+Authenticating as gncu12345678...
+Logged in to profile "default" (token expires 2026-03-31T02:16:10Z / 2026-03-31 11:16 JST)
+```
+
 ::: tip
 `--profile` オプションで複数のアカウントを管理できます。
 
@@ -79,6 +90,16 @@ conoha server list --format json
 conoha --help
 conoha server --help
 conoha server create --help
+```
+
+実行例（`conoha server list`）:
+
+```
+ID                                    NAME            STATUS   FLAVOR         TAG
+1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d  my-web-server   ACTIVE   g2l-t-c3m2     production
+2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e  my-api-server   ACTIVE   g2l-t-c2m1     staging
+3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f  test-server     SHUTOFF  g2l-t-c2m1     test
+4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a  db-server       ACTIVE   g2d-t-c2m4d60  database
 ```
 
 ## 出力フォーマット
