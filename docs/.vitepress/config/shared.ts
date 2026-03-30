@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export const shared = defineConfig({
   title: 'ConoHa CLI',
+  base: '/conoha-cli-pages/',
   lastUpdated: true,
   cleanUrls: true,
 
