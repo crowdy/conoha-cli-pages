@@ -1,5 +1,96 @@
-# server
+# サーバー管理
 
-::: tip 準備中
-このページは現在執筆中です。
+ConoHa CLIでサーバーの作成から管理まですべて行えます。
+
+## サーバー一覧
+
+```bash
+conoha server list
+```
+
+## サーバー作成
+
+### フレーバー（スペック）を選ぶ
+
+```bash
+conoha flavor list
+```
+
+主なフレーバー:
+
+| フレーバー | CPU | メモリ | ディスク |
+|-----------|-----|--------|---------|
+| g2l-t-c1m05d30 | 1 vCPU | 512MB | 30GB |
+| g2l-t-c2m1d100 | 2 vCPU | 1GB | 100GB |
+| g2l-t-c3m2d100 | 3 vCPU | 2GB | 100GB |
+| g2l-t-c4m4d100 | 4 vCPU | 4GB | 100GB |
+
+### イメージを選ぶ
+
+```bash
+conoha image list
+```
+
+### SSHキーペアを作成
+
+```bash
+conoha keypair create --name mykey
+```
+
+秘密鍵が表示されるので、ファイルに保存してください:
+
+```bash
+conoha keypair create --name mykey > ~/.ssh/conoha_mykey
+chmod 600 ~/.ssh/conoha_mykey
+```
+
+### サーバーを作成
+
+```bash
+conoha server create \
+  --name myserver \
+  --flavor g2l-t-c2m1d100 \
+  --image ubuntu-24.04 \
+  --key-name mykey
+```
+
+作成完了まで1〜2分かかります。
+
+## サーバーの起動・停止
+
+```bash
+# 停止
+conoha server stop <サーバー名またはID>
+
+# 起動
+conoha server start <サーバー名またはID>
+
+# 再起動
+conoha server reboot <サーバー名またはID>
+```
+
+## SSHログイン
+
+```bash
+conoha server ssh <サーバー名> --key ~/.ssh/conoha_mykey
+```
+
+## IPアドレスの確認
+
+```bash
+conoha server ips <サーバー名>
+```
+
+## サーバー削除
+
+```bash
+conoha server delete <サーバー名またはID>
+```
+
+::: warning
+削除したサーバーは復元できません。
 :::
+
+## 次のステップ
+
+- [アプリデプロイ](/guide/app-deploy) — Dockerアプリをサーバーにデプロイ
