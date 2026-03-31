@@ -19,13 +19,31 @@ app init → app deploy → app logs で確認
 サーバー上にアプリの受け口を作成します。
 
 ```bash
-conoha app init <サーバー名> --app-name myapp
+conoha app init my-server --app-name hello-world
 ```
 
-これにより、サーバー上に以下が作成されます:
-- `/opt/conoha/myapp/` — 作業ディレクトリ
-- `/opt/conoha/myapp.git/` — Gitリポジトリ（push受信用）
-- post-receiveフック — push時に自動で `docker compose up -d`
+```
+Initializing app "hello-world" on vm-18268c66-ae (133.88.116.147)...
+==> Installing Docker...
+==> Installing Docker Compose plugin...
+==> Installing git...
+==> Creating directories...
+Initialized empty Git repository in /opt/conoha/hello-world.git/
+==> Installing post-receive hook...
+==> Done!
+
+App "hello-world" initialized on vm-18268c66-ae (133.88.116.147).
+
+Add the remote and deploy:
+  git remote add conoha root@133.88.116.147:/opt/conoha/hello-world.git
+  git push conoha main
+```
+
+Docker・Git のインストールとGitリポジトリの作成が自動で行われます。
+
+::: tip app deploy を使う場合
+`git push` の代わりに `conoha app deploy` でもデプロイできます。次のセクションでは `app deploy` を使う方法を紹介します。
+:::
 
 ## 2. アプリのデプロイ
 
@@ -33,7 +51,24 @@ conoha app init <サーバー名> --app-name myapp
 
 ```bash
 cd /path/to/your/project
-conoha app deploy <サーバー名> --app-name myapp
+conoha app deploy my-server
+```
+
+```
+App name: hello-world
+Archiving current directory...
+Uploading to vm-18268c66-ae (133.88.116.147)...
+Building and starting containers...
+ Image hello-world-web Building
+ ...
+ Image hello-world-web Built
+ Container hello-world-web-1 Creating
+ Container hello-world-web-1 Created
+ Container hello-world-web-1 Starting
+ Container hello-world-web-1 Started
+NAME                IMAGE             COMMAND                  SERVICE   CREATED                  STATUS                  PORTS
+hello-world-web-1   hello-world-web   "/docker-entrypoint.…"   web       Less than a second ago   Up Less than a second   0.0.0.0:80->80/tcp
+Deploy complete.
 ```
 
 実行内容:
@@ -44,6 +79,31 @@ conoha app deploy <サーバー名> --app-name myapp
 `.dockerignore` があれば、記載されたファイルは除外されます。`.git/` ディレクトリは常に除外されます。
 
 ## 3. 動作確認
+
+### ブラウザ/curlで確認
+
+サーバーのIPアドレスにアクセスします。
+
+```bash
+curl 133.88.116.147
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hello ConoHa</title>
+</head>
+<body>
+  <h1>Hello from ConoHa!</h1>
+  <p>Deployed with <code>conoha app deploy</code></p>
+</body>
+</html>
+```
+
+::: tip IPアドレスの確認
+`conoha server show my-server` でサーバーのIPアドレスを確認できます。
+:::
 
 ### ログを見る
 
@@ -93,6 +153,41 @@ services:
       - "80:3000"
     restart: unless-stopped
 ```
+
+## git push でデプロイする方法
+
+`app deploy` の代わりに `git push` でもデプロイできます。`app init` 実行時に表示されるコマンドを使います。
+
+### SSH設定
+
+`git push` を使うには、`~/.ssh/config` にサーバーのエントリが必要です。`conoha keypair create` で作成したキーを指定します:
+
+```
+Host conoha
+    HostName 133.88.116.147
+    User root
+    IdentityFile ~/.ssh/conoha_my-key
+```
+
+### リモートの追加とpush
+
+```bash
+git remote add conoha conoha:/opt/conoha/hello-world.git
+git push conoha main
+```
+
+```
+Enumerating objects: 180, done.
+...
+remote: ==> Checking out main...
+remote: Switched to branch 'main'
+To conoha:/opt/conoha/hello-world.git
+ * [new branch]      main -> main
+```
+
+::: warning IPアドレス直指定は非推奨
+`root@133.88.116.147:/opt/conoha/...` 形式では SSH鍵が自動選択されず `Permission denied` になることがあります。SSH config のホスト名を使いましょう。
+:::
 
 ## 次のステップ
 
