@@ -27,12 +27,48 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
       ],
       '/examples/': [
         {
-          text: '実践デプロイ例',
+          text: 'スターター',
+          items: [
+            { text: 'Hello World', link: '/examples/hello-world' },
+          ],
+        },
+        {
+          text: 'Webフレームワーク',
           items: [
             { text: 'Next.js', link: '/examples/nextjs' },
-            { text: 'FastAPI + AIチャットボット', link: '/examples/fastapi-ai-chatbot' },
+            { text: 'Vite + React', link: '/examples/vite-react' },
+            { text: 'SvelteKit', link: '/examples/sveltekit' },
             { text: 'Rails + PostgreSQL', link: '/examples/rails-postgresql' },
+            { text: 'Django + PostgreSQL', link: '/examples/django-postgresql' },
+            { text: 'Laravel + MySQL', link: '/examples/laravel-mysql' },
+            { text: 'Spring Boot + PostgreSQL', link: '/examples/spring-boot-postgresql' },
+            { text: 'Express.js + MongoDB', link: '/examples/express-mongodb' },
+            { text: 'NestJS + PostgreSQL', link: '/examples/nestjs-postgresql' },
+            { text: 'Go Fiber', link: '/examples/go-fiber' },
+            { text: 'Rust Actix-web', link: '/examples/rust-actix-web' },
+          ],
+        },
+        {
+          text: 'AI / LLM',
+          items: [
+            { text: 'FastAPI + AIチャットボット', link: '/examples/fastapi-ai-chatbot' },
+            { text: 'Ollama + Open WebUI', link: '/examples/ollama-webui' },
+          ],
+        },
+        {
+          text: 'セルフホスティング',
+          items: [
             { text: 'WordPress', link: '/examples/wordpress' },
+            { text: 'Ghost ブログ', link: '/examples/ghost-blog' },
+            { text: 'Gitea', link: '/examples/gitea' },
+            { text: 'MinIO + n8n', link: '/examples/minio-n8n' },
+          ],
+        },
+        {
+          text: 'アーキテクチャパターン',
+          items: [
+            { text: 'nginx リバースプロキシ', link: '/examples/nginx-reverse-proxy' },
+            { text: 'Ory Hydra + FastAPI (OAuth2)', link: '/examples/hydra-python-api' },
           ],
         },
       ],
