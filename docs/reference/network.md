@@ -1,0 +1,168 @@
+# network
+
+ネットワーク、サブネット、ポート、セキュリティグループなどの管理を行うコマンドグループです。
+
+## network list
+
+ネットワーク一覧を表示します。
+
+### 使い方
+
+```bash
+conoha network list
+```
+
+---
+
+## network create
+
+ネットワークを作成します。
+
+### 使い方
+
+```bash
+conoha network create --name <ネットワーク名>
+```
+
+---
+
+## network delete
+
+ネットワークを削除します。
+
+### 使い方
+
+```bash
+conoha network delete <ネットワークID>
+```
+
+---
+
+## network subnet
+
+サブネットの管理を行います。
+
+### 使い方
+
+```bash
+conoha network subnet list
+conoha network subnet show <サブネットID>
+conoha network subnet create [flags]
+conoha network subnet delete <サブネットID>
+```
+
+---
+
+## network port
+
+ポートの管理を行います。
+
+### 使い方
+
+```bash
+conoha network port list
+conoha network port show <ポートID>
+conoha network port create [flags]
+conoha network port delete <ポートID>
+```
+
+---
+
+## network security-group
+
+セキュリティグループの管理を行います。
+
+エイリアス: `sg`
+
+### network security-group list
+
+セキュリティグループ一覧を表示します。
+
+```bash
+conoha network security-group list
+```
+
+### network security-group show
+
+セキュリティグループの詳細（ルール一覧を含む）を表示します。
+
+```bash
+conoha network security-group show <セキュリティグループ名またはID>
+```
+
+### network security-group create
+
+セキュリティグループを作成します。
+
+```bash
+conoha network security-group create --name <名前> [--description <説明>]
+```
+
+| オプション | 説明 | 必須 |
+|-----------|------|------|
+| `--name` | セキュリティグループ名 | ○ |
+| `--description` | 説明 | |
+
+### network security-group delete
+
+セキュリティグループを削除します。
+
+```bash
+conoha network security-group delete <セキュリティグループ名またはID>
+```
+
+---
+
+## network security-group-rule
+
+セキュリティグループルールの管理を行います。
+
+### network security-group-rule list
+
+指定したセキュリティグループのルール一覧を表示します。
+
+```bash
+conoha network security-group-rule list --security-group <セキュリティグループID>
+```
+
+### network security-group-rule create
+
+ルールを作成します。
+
+```bash
+conoha network security-group-rule create \
+  --security-group <セキュリティグループID> \
+  --direction ingress \
+  --protocol tcp \
+  --port-range-min 80 \
+  --port-range-max 80
+```
+
+| オプション | 説明 | 必須 |
+|-----------|------|------|
+| `--security-group` | セキュリティグループID | ○ |
+| `--direction` | `ingress` または `egress` | ○ |
+| `--protocol` | プロトコル（`tcp`, `udp`, `icmp`） | |
+| `--port-range-min` | ポート範囲の開始 | |
+| `--port-range-max` | ポート範囲の終了 | |
+| `--ethertype` | `IPv4` または `IPv6` | |
+
+### network security-group-rule delete
+
+ルールを削除します。
+
+```bash
+conoha network security-group-rule delete <ルールID>
+```
+
+---
+
+## network qos
+
+QoSポリシーの一覧を表示します。
+
+### 使い方
+
+```bash
+conoha network qos list
+```

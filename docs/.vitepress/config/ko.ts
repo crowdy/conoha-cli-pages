@@ -77,6 +77,7 @@ export const ko: LocaleSpecificConfig<DefaultTheme.Config> = {
           items: [
             { text: 'auth', link: '/ko/reference/auth' },
             { text: 'server', link: '/ko/reference/server' },
+            { text: 'network', link: '/ko/reference/network' },
             { text: 'app', link: '/ko/reference/app' },
           ],
         },

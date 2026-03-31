@@ -77,6 +77,7 @@ export const en: LocaleSpecificConfig<DefaultTheme.Config> = {
           items: [
             { text: 'auth', link: '/en/reference/auth' },
             { text: 'server', link: '/en/reference/server' },
+            { text: 'network', link: '/en/reference/network' },
             { text: 'app', link: '/en/reference/app' },
           ],
         },

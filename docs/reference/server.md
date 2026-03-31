@@ -2,6 +2,32 @@
 
 サーバー（VM）の管理を行うコマンドグループです。
 
+## サーバーの指定方法 {#server-identifier}
+
+多くのサーバーコマンドでは `<サーバー名またはID>` を引数に取ります。以下の3つの方法でサーバーを指定できます：
+
+| 指定方法 | 例 | 説明 |
+|---------|---|------|
+| UUID | `1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d` | サーバーID（完全一致） |
+| VM名 | `vps-1234567` | ConoHaが自動付与するVM名 |
+| ネームタグ | `my-web-server` | ユーザーが設定した名前（`instance_name_tag`） |
+
+::: tip ネームタグを使うと便利です
+UUIDやランダムなVM名の代わりに、覚えやすいネームタグでサーバーを指定できます。ネームタグはサーバー作成時に `--name` で設定され、`server rename` で変更できます。
+
+```bash
+# UUIDの代わりにネームタグで操作
+conoha server stop my-web-server
+conoha server ssh my-web-server
+```
+:::
+
+::: warning 優先順位
+VM名とネームタグが同じ文字列の場合、VM名が優先されます。同じネームタグを持つサーバーが複数ある場合はエラーになるため、UUIDを使用してください。
+:::
+
+---
+
 ## server list
 
 サーバー一覧を表示します。
@@ -231,6 +257,58 @@ conoha server ips <サーバー名またはID>
 
 ```bash
 conoha server metadata <サーバー名またはID>
+```
+
+---
+
+## server add-security-group
+
+サーバーにセキュリティグループを追加します。
+
+エイリアス: `add-sg`
+
+### 使い方
+
+```bash
+conoha server add-security-group <サーバー名またはID> --name <セキュリティグループ名>
+```
+
+### オプション
+
+| オプション | 説明 | 必須 |
+|-----------|------|------|
+| `--name` | セキュリティグループ名 | ○ |
+
+### 例
+
+```bash
+conoha server add-security-group my-web-server --name IPv4v6-Web
+```
+
+---
+
+## server remove-security-group
+
+サーバーからセキュリティグループを削除します。
+
+エイリアス: `remove-sg`
+
+### 使い方
+
+```bash
+conoha server remove-security-group <サーバー名またはID> --name <セキュリティグループ名>
+```
+
+### オプション
+
+| オプション | 説明 | 必須 |
+|-----------|------|------|
+| `--name` | セキュリティグループ名 | ○ |
+
+### 例
+
+```bash
+conoha server remove-security-group my-web-server --name IPv4v6-Web
 ```
 
 ---
