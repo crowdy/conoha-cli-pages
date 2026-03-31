@@ -52,7 +52,178 @@ npm install @nestjs/typeorm typeorm pg hbs
 }
 ```
 
-## 3. Dockerfile を作成
+## 3. src/app.module.ts を作成
+
+TypeORM の接続設定とモジュール定義です。
+
+```typescript
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Post } from "./post.entity";
+import { PostsController } from "./posts.controller";
+import { PostsService } from "./posts.service";
+
+@Module({
+  imports: [
+    TypeOrmModule.forRoot({
+      type: "postgres",
+      host: process.env.DB_HOST || "db",
+      port: 5432,
+      username: process.env.DB_USER || "postgres",
+      password: process.env.DB_PASSWORD || "postgres",
+      database: process.env.DB_NAME || "app_production",
+      entities: [Post],
+      synchronize: true,
+    }),
+    TypeOrmModule.forFeature([Post]),
+  ],
+  controllers: [PostsController],
+  providers: [PostsService],
+})
+export class AppModule {}
+```
+
+## 4. src/post.entity.ts を作成
+
+```typescript
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
+
+@Entity("posts")
+export class Post {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  title: string;
+
+  @Column({ type: "text", nullable: true })
+  body: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+}
+```
+
+## 5. src/posts.service.ts を作成
+
+```typescript
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Post } from "./post.entity";
+
+@Injectable()
+export class PostsService {
+  constructor(
+    @InjectRepository(Post)
+    private readonly repo: Repository<Post>,
+  ) {}
+
+  findAll(): Promise<Post[]> {
+    return this.repo.find({ order: { createdAt: "DESC" } });
+  }
+
+  create(title: string, body: string): Promise<Post> {
+    const post = this.repo.create({ title, body });
+    return this.repo.save(post);
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.repo.delete(id);
+  }
+}
+```
+
+## 6. src/posts.controller.ts を作成
+
+```typescript
+import { Body, Controller, Get, Post as HttpPost, Param, Render, Redirect } from "@nestjs/common";
+import { PostsService } from "./posts.service";
+
+@Controller()
+export class PostsController {
+  constructor(private readonly postsService: PostsService) {}
+
+  @Get()
+  @Render("index")
+  async index() {
+    const posts = await this.postsService.findAll();
+    return { posts };
+  }
+
+  @HttpPost("posts")
+  @Redirect("/")
+  async create(@Body() body: { title: string; body: string }) {
+    await this.postsService.create(body.title, body.body);
+  }
+
+  @HttpPost("posts/:id/delete")
+  @Redirect("/")
+  async remove(@Param("id") id: string) {
+    await this.postsService.remove(Number(id));
+  }
+}
+```
+
+## 7. views/index.hbs を作成
+
+Handlebars テンプレートエンジンで描画される投稿一覧ページです。
+
+```bash
+mkdir views
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NestJS on ConoHa</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background: #f5f5f5;
+      color: #333;
+    }
+    h1 { margin-bottom: 1rem; }
+    .post { background: #fff; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+    .post h2 { margin: 0 0 0.5rem; font-size: 1.2rem; }
+    .post p { margin: 0; color: #666; }
+    .form-box { background: #fff; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; }
+    input, textarea { width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box; }
+    textarea { height: 80px; resize: vertical; }
+    button { padding: 0.5rem 1.5rem; background: #e0234e; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+    .delete { background: #d32f2f; font-size: 0.85rem; padding: 0.3rem 0.8rem; }
+    form.inline { display: inline; }
+  </style>
+</head>
+<body>
+  <h1>NestJS on ConoHa</h1>
+  <div class="form-box">
+    <form action="/posts" method="post">
+      <input type="text" name="title" placeholder="Title" required>
+      <textarea name="body" placeholder="Body (optional)"></textarea>
+      <button type="submit">Create Post</button>
+    </form>
+  </div>
+  {{#each posts}}
+    <div class="post">
+      <h2>{{this.title}}</h2>
+      <p>{{this.body}}</p>
+      <form action="/posts/{{this.id}}/delete" method="post" class="inline">
+        <button type="submit" class="delete">Delete</button>
+      </form>
+    </div>
+  {{/each}}
+</body>
+</html>
+```
+
+## 8. Dockerfile を作成
 
 ```dockerfile
 # Stage 1: Build
@@ -74,7 +245,7 @@ EXPOSE 3000
 CMD ["node", "dist/main"]
 ```
 
-## 4. compose.yml を作成
+## 9. compose.yml を作成
 
 ```yaml
 services:
@@ -107,7 +278,7 @@ volumes:
   db_data:
 ```
 
-## 5. .dockerignore を作成
+## 10. .dockerignore を作成
 
 ```
 README.md
@@ -116,7 +287,7 @@ node_modules
 dist
 ```
 
-## 6. デプロイ
+## 11. デプロイ
 
 ```bash
 # 初期化（初回のみ）
@@ -126,7 +297,7 @@ conoha app init <サーバー名> --app-name nestjs-app
 conoha app deploy <サーバー名> --app-name nestjs-app
 ```
 
-## 7. 動作確認
+## 12. 動作確認
 
 ```bash
 # ステータス確認

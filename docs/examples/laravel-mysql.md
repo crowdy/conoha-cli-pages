@@ -114,7 +114,19 @@ volumes:
 `depends_on` に `condition: service_healthy` を指定することで、MySQL が完全に起動してから Laravel コンテナが立ち上がります。マイグレーション実行時の接続エラーを防げます。
 :::
 
-## 5. デプロイ
+## 5. .dockerignore を作成
+
+```
+.git
+.gitignore
+*.md
+node_modules/
+vendor/
+storage/logs/
+.env
+```
+
+## 6. デプロイ
 
 ```bash
 # 初期化（初回のみ）
@@ -124,7 +136,7 @@ conoha app init <サーバー名> --app-name laravel-app
 conoha app deploy <サーバー名> --app-name laravel-app
 ```
 
-## 6. 動作確認
+## 7. 動作確認
 
 ```bash
 # ステータス確認

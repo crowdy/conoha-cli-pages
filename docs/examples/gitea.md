@@ -14,7 +14,7 @@ GiteaとPostgreSQLを使ったセルフホスティングGitサービスをConoH
 - ConoHa CLIがインストール・ログイン済み（[はじめに](/guide/getting-started)）
 - サーバーが作成済み（[サーバー管理](/guide/server)）
 
-## 1. docker-compose.yml を作成
+## 1. compose.yml を作成
 
 ```yaml
 services:

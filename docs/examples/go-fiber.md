@@ -88,9 +88,79 @@ func main() {
         return c.Status(404).JSON(fiber.Map{"error": "not found"})
     })
 
+    // Serve index page
+    app.Get("/", func(c *fiber.Ctx) error {
+        c.Set("Content-Type", "text/html")
+        return c.SendString(indexHTML)
+    })
+
     fmt.Println("Server running on port 3000")
     log.Fatal(app.Listen(":3000"))
 }
+
+const indexHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go Fiber on ConoHa</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background: #f5f5f5;
+      color: #333;
+    }
+    h1 { margin-bottom: 1rem; }
+    .msg { background: #fff; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .form-box { background: #fff; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; display: flex; gap: 0.5rem; }
+    input { flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
+    button { padding: 0.5rem 1.5rem; background: #00acd7; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+    .delete { background: #d32f2f; font-size: 0.85rem; padding: 0.3rem 0.8rem; }
+  </style>
+</head>
+<body>
+  <h1>Go Fiber on ConoHa</h1>
+  <div class="form-box">
+    <input type="text" id="input" placeholder="Type a message..." required>
+    <button onclick="send()">Send</button>
+  </div>
+  <div id="list"></div>
+  <script>
+    async function load() {
+      const res = await fetch("/api/messages");
+      const msgs = await res.json();
+      const list = document.getElementById("list");
+      list.innerHTML = (msgs || []).map(m =>
+        '<div class="msg"><span>' + m.text + '</span>' +
+        '<button class="delete" onclick="del(' + m.id + ')">Delete</button></div>'
+      ).join("");
+    }
+    async function send() {
+      const input = document.getElementById("input");
+      const text = input.value.trim();
+      if (!text) return;
+      await fetch("/api/messages", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({text})
+      });
+      input.value = "";
+      load();
+    }
+    async function del(id) {
+      await fetch("/api/messages/" + id, {method: "DELETE"});
+      load();
+    }
+    document.getElementById("input").addEventListener("keydown", e => {
+      if (e.key === "Enter") send();
+    });
+    load();
+  </script>
+</body>
+</html>`
 ```
 
 ## 3. Dockerfile を作成
@@ -126,7 +196,15 @@ services:
       - "3000:3000"
 ```
 
-## 5. デプロイ
+## 5. .dockerignore を作成
+
+```
+.git
+.gitignore
+*.md
+```
+
+## 6. デプロイ
 
 ```bash
 # 初期化（初回のみ）
@@ -136,7 +214,7 @@ conoha app init <サーバー名> --app-name go-api
 conoha app deploy <サーバー名> --app-name go-api
 ```
 
-## 6. 動作確認
+## 7. 動作確認
 
 ```bash
 # ステータス確認

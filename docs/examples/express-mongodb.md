@@ -89,7 +89,65 @@ app.listen(PORT, () => {
 }
 ```
 
-## 4. Dockerfile を作成
+## 4. views/index.ejs を作成
+
+EJS テンプレートエンジンで描画されるビューファイルを作成します。
+
+```bash
+mkdir views
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Express on ConoHa</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background: #f5f5f5;
+      color: #333;
+    }
+    h1 { margin-bottom: 1rem; }
+    .post { background: #fff; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+    .post h2 { margin: 0 0 0.5rem; font-size: 1.2rem; }
+    .post p { margin: 0; color: #666; }
+    .form-box { background: #fff; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; }
+    input, textarea { width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box; }
+    textarea { height: 80px; resize: vertical; }
+    button { padding: 0.5rem 1.5rem; background: #1976d2; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+    .delete { background: #d32f2f; font-size: 0.85rem; padding: 0.3rem 0.8rem; }
+    form.inline { display: inline; }
+  </style>
+</head>
+<body>
+  <h1>Express on ConoHa</h1>
+  <div class="form-box">
+    <form action="/posts" method="post">
+      <input type="text" name="title" placeholder="Title" required>
+      <textarea name="body" placeholder="Body (optional)"></textarea>
+      <button type="submit">Create Post</button>
+    </form>
+  </div>
+  <% posts.forEach(post => { %>
+    <div class="post">
+      <h2><%= post.title %></h2>
+      <p><%= post.body %></p>
+      <form action="/posts/<%= post._id %>/delete" method="post" class="inline">
+        <button type="submit" class="delete">Delete</button>
+      </form>
+    </div>
+  <% }) %>
+</body>
+</html>
+```
+
+## 5. Dockerfile を作成
 
 ```dockerfile
 FROM node:22-alpine
@@ -101,7 +159,7 @@ EXPOSE 3000
 CMD ["node", "app.js"]
 ```
 
-## 5. compose.yml を作成
+## 6. compose.yml を作成
 
 ```yaml
 services:
@@ -123,7 +181,7 @@ volumes:
   db_data:
 ```
 
-## 6. .dockerignore を作成
+## 7. .dockerignore を作成
 
 ```
 README.md
@@ -131,7 +189,7 @@ README.md
 node_modules
 ```
 
-## 7. デプロイ
+## 8. デプロイ
 
 ```bash
 # 初期化（初回のみ）
@@ -141,7 +199,7 @@ conoha app init <サーバー名> --app-name express-app
 conoha app deploy <サーバー名> --app-name express-app
 ```
 
-## 8. 動作確認
+## 9. 動作確認
 
 ```bash
 # ステータス確認

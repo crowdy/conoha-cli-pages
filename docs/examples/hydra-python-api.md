@@ -58,7 +58,7 @@ jinja2==3.1.6
 python-multipart==0.0.20
 ```
 
-## 3. docker-compose.yml を作成
+## 3. compose.yml を作成
 
 ```yaml
 services:
@@ -120,7 +120,18 @@ volumes:
   db_data:
 ```
 
-## 4. デプロイ
+## 4. .dockerignore を作成
+
+```
+.git
+.gitignore
+*.md
+__pycache__/
+*.pyc
+.env
+```
+
+## 5. デプロイ
 
 ```bash
 # 初期化（初回のみ）
@@ -130,7 +141,7 @@ conoha app init <サーバー名> --app-name hydra
 conoha app deploy <サーバー名> --app-name hydra
 ```
 
-## 5. デプロイ後セットアップ（OAuth2クライアント登録）
+## 6. デプロイ後セットアップ（OAuth2クライアント登録）
 
 デプロイ後、SSHでサーバーに接続してOAuth2クライアントを登録します:
 
@@ -162,7 +173,7 @@ docker compose exec hydra hydra create oauth2-client \
   --token-endpoint-auth-method client_secret_post
 ```
 
-## 6. 動作確認
+## 7. 動作確認
 
 ```bash
 # ステータス確認

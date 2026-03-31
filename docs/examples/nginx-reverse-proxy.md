@@ -77,7 +77,7 @@ server {
 }
 ```
 
-## 3. docker-compose.yml を作成
+## 3. compose.yml を作成
 
 ```yaml
 services:
@@ -98,7 +98,16 @@ services:
     build: ./app2
 ```
 
-## 4. App 1（Node.js）を作成
+## 4. .dockerignore を作成
+
+```
+.git
+.gitignore
+*.md
+node_modules/
+```
+
+## 5. App 1（Node.js）を作成
 
 `app1/Dockerfile`:
 
@@ -142,7 +151,7 @@ const server = http.createServer((req, res) => {
 server.listen(3000, () => console.log("App 1 running on port 3000"));
 ```
 
-## 5. App 2（Python）を作成
+## 6. App 2（Python）を作成
 
 `app2/Dockerfile`:
 
@@ -188,7 +197,7 @@ if __name__ == "__main__":
     server.serve_forever()
 ```
 
-## 6. デプロイ
+## 7. デプロイ
 
 ```bash
 # 初期化（初回のみ）
@@ -198,7 +207,7 @@ conoha app init <サーバー名> --app-name reverse-proxy
 conoha app deploy <サーバー名> --app-name reverse-proxy
 ```
 
-## 7. 動作確認
+## 8. 動作確認
 
 ```bash
 # ステータス確認

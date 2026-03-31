@@ -26,13 +26,13 @@ cd myapp
 [package]
 name = "myapp"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 actix-web = "4"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
 
 ## 3. src/main.rs を作成
@@ -58,6 +58,10 @@ struct AppState {
     next_id: Mutex<u32>,
 }
 
+async fn index() -> impl Responder {
+    HttpResponse::Ok().content_type("text/html").body(INDEX_HTML)
+}
+
 async fn list_messages(data: web::Data<AppState>) -> impl Responder {
     let messages = data.messages.lock().unwrap();
     HttpResponse::Ok().json(&*messages)
@@ -68,12 +72,14 @@ async fn create_message(
     body: web::Json<CreateMessage>,
 ) -> impl Responder {
     if body.text.is_empty() {
-        return HttpResponse::BadRequest()
-            .json(serde_json::json!({"error": "text is required"}));
+        return HttpResponse::BadRequest().json(serde_json::json!({"error": "text is required"}));
     }
     let mut messages = data.messages.lock().unwrap();
     let mut next_id = data.next_id.lock().unwrap();
-    let msg = Message { id: *next_id, text: body.text.clone() };
+    let msg = Message {
+        id: *next_id,
+        text: body.text.clone(),
+    };
     *next_id += 1;
     messages.push(msg.clone());
     HttpResponse::Created().json(msg)
@@ -109,6 +115,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(data.clone())
+            .route("/", web::get().to(index))
             .route("/health", web::get().to(health))
             .route("/api/messages", web::get().to(list_messages))
             .route("/api/messages", web::post().to(create_message))
@@ -118,6 +125,69 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
+
+const INDEX_HTML: &str = r#"<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rust Actix on ConoHa</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background: #f5f5f5;
+      color: #333;
+    }
+    h1 { margin-bottom: 1rem; }
+    .msg { background: #fff; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .form-box { background: #fff; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; display: flex; gap: 0.5rem; }
+    input { flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
+    button { padding: 0.5rem 1.5rem; background: #b7410e; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+    .delete { background: #d32f2f; font-size: 0.85rem; padding: 0.3rem 0.8rem; }
+  </style>
+</head>
+<body>
+  <h1>Rust Actix on ConoHa</h1>
+  <div class="form-box">
+    <input type="text" id="input" placeholder="Type a message..." required>
+    <button onclick="send()">Send</button>
+  </div>
+  <div id="list"></div>
+  <script>
+    async function load() {
+      const res = await fetch("/api/messages");
+      const msgs = await res.json();
+      document.getElementById("list").innerHTML = msgs.map(m =>
+        '<div class="msg"><span>' + m.text + '</span>' +
+        '<button class="delete" onclick="del(' + m.id + ')">Delete</button></div>'
+      ).join("");
+    }
+    async function send() {
+      const input = document.getElementById("input");
+      const text = input.value.trim();
+      if (!text) return;
+      await fetch("/api/messages", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({text})
+      });
+      input.value = "";
+      load();
+    }
+    async function del(id) {
+      await fetch("/api/messages/" + id, {method: "DELETE"});
+      load();
+    }
+    document.getElementById("input").addEventListener("keydown", e => {
+      if (e.key === "Enter") send();
+    });
+    load();
+  </script>
+</body>
+</html>"#;
 ```
 
 ## 4. Dockerfile を作成
@@ -154,7 +224,16 @@ services:
       - "3000:3000"
 ```
 
-## 6. デプロイ
+## 6. .dockerignore を作成
+
+```
+.git
+.gitignore
+*.md
+target/
+```
+
+## 7. デプロイ
 
 ```bash
 # 初期化（初回のみ）
@@ -164,7 +243,7 @@ conoha app init <サーバー名> --app-name rust-api
 conoha app deploy <サーバー名> --app-name rust-api
 ```
 
-## 7. 動作確認
+## 8. 動作確認
 
 ```bash
 # ステータス確認
