@@ -43,7 +43,12 @@ conoha app deploy <サーバー名> --app-name myapp
 ## デプロイ済みアプリ一覧
 
 ```bash
-conoha app list <サーバー名>
+conoha app list my-server
+```
+
+```
+hello-world                    running (1)
+myapp                          no containers
 ```
 
 アプリ名とコンテナの状態（running / stopped / no containers）が表示されます。
@@ -51,10 +56,20 @@ conoha app list <サーバー名>
 ## アプリの削除
 
 ```bash
-conoha app destroy <サーバー名> --app-name myapp
+conoha app destroy my-server --app-name hello-world
 ```
 
-確認プロンプトが表示されます。 `--yes` で確認をスキップできます。
+```
+Destroy app "hello-world" on vm-18268c66-ae? All data will be deleted. [y/N]: y
+==> Stopping containers...
+==> Removing work directory...
+==> Removing git repository...
+==> Removing environment file...
+==> Done.
+App "hello-world" destroyed.
+```
+
+`--yes` で確認をスキップできます。
 
 ::: warning
 削除すると以下がすべて消えます:
