@@ -115,5 +115,6 @@ ID                                    NAME            STATUS   FLAVOR         TA
 
 ## 次のステップ
 
+- [クイックスタート](/guide/quickstart) — キーペア作成 → サーバー作成 → SSH接続の一連の流れ
 - [サーバー管理](/guide/server) — サーバーの作成・起動・停止
 - [アプリデプロイ](/guide/app-deploy) — Dockerアプリのデプロイ

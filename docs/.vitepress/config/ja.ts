@@ -18,6 +18,7 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
           text: 'ガイド',
           items: [
             { text: 'はじめに', link: '/guide/getting-started' },
+            { text: 'クイックスタート', link: '/guide/quickstart' },
             { text: 'サーバー管理', link: '/guide/server' },
             { text: 'アプリデプロイ', link: '/guide/app-deploy' },
             { text: 'アプリ管理', link: '/guide/app-management' },
