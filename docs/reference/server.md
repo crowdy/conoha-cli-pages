@@ -80,20 +80,56 @@ conoha server create [flags]
 | オプション | 説明 | 必須 |
 |-----------|------|------|
 | `--name` | サーバー名 | ○ |
-| `--flavor` | フレーバーID | ○ |
-| `--image` | イメージ名またはID | ○ |
-| `--key-name` | SSHキーペア名 | |
-| `--security-group` | セキュリティグループ名 | |
-| `--startup-script` | 起動スクリプトファイルパス | |
+| `--flavor` | フレーバーID（省略時はインタラクティブ選択） | |
+| `--image` | イメージ名またはID（省略時はインタラクティブ選択） | |
+| `--key-name` | SSHキーペア名（省略時はインタラクティブ選択） | |
+| `--volume` | ブートディスクとして使用する既存ボリュームID | |
+| `--security-group` | セキュリティグループ名（複数指定可、省略時はインタラクティブ選択） | |
+| `--admin-pass` | 管理者パスワード | |
+| `--user-data` | 起動スクリプトファイルパス | |
+| `--user-data-raw` | 起動スクリプト文字列（インライン） | |
+| `--user-data-url` | 起動スクリプトURL（`#include`でラップ） | |
+| `--wait` | サーバーがACTIVEになるまで待機 | |
+| `--timeout` | 待機タイムアウト時間 | |
+
+::: tip インタラクティブモード
+`--name` 以外のオプションを省略すると、対話形式で選択できます。`--flavor`、`--image`、`--key-name`、`--security-group` はそれぞれ利用可能な一覧から選択できます。
+:::
+
+::: tip 起動スクリプト
+`--user-data`、`--user-data-raw`、`--user-data-url` は同時に1つのみ指定できます。最大16KiBまでです。
+:::
 
 ### 例
 
 ```bash
+# 必須オプションのみ（他はインタラクティブ選択）
+conoha server create --name myserver
+
+# すべてのオプションを指定
 conoha server create \
   --name myserver \
   --flavor g2l-t-c2m1d100 \
   --image ubuntu-24.04 \
-  --key-name mykey
+  --key-name mykey \
+  --security-group IPv4v6-SSH \
+  --security-group IPv4v6-Web
+
+# 起動スクリプト付き
+conoha server create \
+  --name myserver \
+  --flavor g2l-t-c2m1d100 \
+  --image ubuntu-24.04 \
+  --key-name mykey \
+  --user-data ./setup.sh
+
+# 作成完了まで待機
+conoha server create \
+  --name myserver \
+  --flavor g2l-t-c2m1d100 \
+  --image ubuntu-24.04 \
+  --key-name mykey \
+  --wait
 ```
 
 ---
@@ -202,13 +238,14 @@ conoha server ssh <サーバー名> [flags]
 
 | オプション | 説明 |
 |-----------|------|
-| `--key` | 秘密鍵のパス |
-| `--user` | ユーザー名（デフォルト: root） |
+| `--identity`, `-i` | 秘密鍵のパス |
+| `--user`, `-l` | ユーザー名（デフォルト: root） |
+| `--port`, `-p` | SSHポート（デフォルト: 22） |
 
 ### 例
 
 ```bash
-conoha server ssh myserver --key ~/.ssh/conoha_mykey
+conoha server ssh myserver --identity ~/.ssh/conoha_mykey
 ```
 
 ---
