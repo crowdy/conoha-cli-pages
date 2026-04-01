@@ -238,13 +238,14 @@ conoha server ssh <サーバー名> [flags]
 
 | オプション | 説明 |
 |-----------|------|
-| `--key` | 秘密鍵のパス |
-| `--user` | ユーザー名（デフォルト: root） |
+| `--identity`, `-i` | 秘密鍵のパス |
+| `--user`, `-l` | ユーザー名（デフォルト: root） |
+| `--port`, `-p` | SSHポート（デフォルト: 22） |
 
 ### 例
 
 ```bash
-conoha server ssh myserver --key ~/.ssh/conoha_mykey
+conoha server ssh myserver --identity ~/.ssh/conoha_mykey
 ```
 
 ---
