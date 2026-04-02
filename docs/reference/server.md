@@ -96,6 +96,12 @@ conoha server create [flags]
 `--name` 以外のオプションを省略すると、対話形式で選択できます。`--flavor`、`--image`、`--key-name`、`--security-group` はそれぞれ利用可能な一覧から選択できます。
 :::
 
+::: tip 非インタラクティブモード（スクリプト・CI/CD）
+TTYが利用できない環境（CI/CD、スクリプト、自動化ツール）では、`--flavor`、`--image`、`--key-name`、`--security-group` をフラグで指定するとプロンプトなしで実行できます。ブートボリュームは `{サーバー名}-boot`（100GB）として自動作成されます。確認プロンプトをスキップするには `-y` フラグを使用してください。
+
+既存ボリュームを使用したい場合は `--volume` フラグで明示的に指定してください。
+:::
+
 ::: tip 起動スクリプト
 `--user-data`、`--user-data-raw`、`--user-data-url` は同時に1つのみ指定できます。最大16KiBまでです。
 :::
@@ -130,6 +136,15 @@ conoha server create \
   --image ubuntu-24.04 \
   --key-name mykey \
   --wait
+
+# スクリプト・CI/CDでの使用（非インタラクティブ）
+conoha server create \
+  --name myserver \
+  --flavor g2l-t-c2m1d100 \
+  --image ubuntu-24.04 \
+  --key-name mykey \
+  --security-group IPv4v6-SSH \
+  --wait -y
 ```
 
 ---
