@@ -93,7 +93,7 @@ conoha app logs <サーバー名> --app-name wordpress
 データベースのバックアップ:
 
 ```bash
-conoha server ssh <サーバー名> --key ~/.ssh/conoha_mykey
+conoha server ssh <サーバー名> -i ~/.ssh/conoha_mykey
 # サーバー内で:
 cd /opt/conoha/wordpress
 docker compose exec db mysqldump -u root -p wordpress > backup.sql

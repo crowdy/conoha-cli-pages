@@ -119,7 +119,7 @@ conoha app deploy <サーバー名> --app-name chatbot
 初回デプロイ後、Ollamaにモデルをダウンロードさせます:
 
 ```bash
-conoha server ssh <サーバー名> --key ~/.ssh/conoha_mykey
+conoha server ssh <サーバー名> -i ~/.ssh/conoha_mykey
 # サーバー内で:
 docker exec -it chatbot-ollama-1 ollama pull gemma3:4b
 ```

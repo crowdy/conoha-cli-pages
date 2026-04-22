@@ -71,7 +71,7 @@ conoha server reboot <サーバー名またはID>
 ## SSHログイン
 
 ```bash
-conoha server ssh <サーバー名> --key ~/.ssh/conoha_mykey
+conoha server ssh <サーバー名> -i ~/.ssh/conoha_mykey
 ```
 
 ## IPアドレスの確認

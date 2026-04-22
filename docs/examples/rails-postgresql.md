@@ -103,7 +103,7 @@ conoha app deploy <サーバー名> --app-name myapp
 初回デプロイ後:
 
 ```bash
-conoha server ssh <サーバー名> --key ~/.ssh/conoha_mykey
+conoha server ssh <サーバー名> -i ~/.ssh/conoha_mykey
 # サーバー内で:
 cd /opt/conoha/myapp
 docker compose exec web bundle exec rails db:create db:migrate
