@@ -52,7 +52,9 @@ conoha keypair create my-key
 ### 4. サーバーを作成
 
 ```bash
-conoha server create --name my-server --wait
+conoha server create --name my-server \
+  --flavor g2l-t-c2m1d100 --image ubuntu-24.04 \
+  --key-name my-key --security-group IPv4v6-SSH --wait
 ```
 ```
 ✓ Server my-server is ACTIVE (163.xx.xx.xx)

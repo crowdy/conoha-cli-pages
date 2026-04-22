@@ -5,6 +5,7 @@ export const shared = defineConfig({
   base: '/conoha-cli-pages/',
   lastUpdated: true,
   cleanUrls: true,
+  srcExclude: ['**/superpowers/**'],
 
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
