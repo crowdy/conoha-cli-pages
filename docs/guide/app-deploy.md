@@ -93,6 +93,45 @@ accessories: [db]
 - `app rollback <server>` は既定でルート → expose 逆順で全ブロックをロールバックします。`--target=<label>` (または `--target=web`) で個別指定も可能。drain 窓が閉じているブロックは警告のみでスキップされ、残りのブロックは継続して処理されます。
 - 旧 CLI (< v0.6.0) は `expose:` を silently 無視します。multi-host を使う場合は CI で CLI の最低バージョンを v0.6.0 以上に固定してください。
 
+### 固定ポートバインディングの回避
+
+proxy モードでは CLI が各スロットに**動的なホストポート**を割り当ててリバースプロキシ経由で公開します。`compose.yml` に `ports: "3000:3000"` のような**ホスト側固定ポートバインディング**があると、2 回目のデプロイ (green slot) でホストポート競合が起きてデプロイが失敗します。
+
+対処法は 2 つあります:
+
+1. `compose.yml` の `ports:` を `expose:` に書き換える (シンプル・推奨)
+2. プロジェクトルートに `conoha-docker-compose.yml` を置いて `compose.yml` の代わりに使う (`compose.yml` を変更したくない場合 — [conoha.yml の `compose_file` 自動検出順](#conoha-yml-の作成)で `conoha-docker-compose.yml` が最優先)
+
+**元の `compose.yml` (no-proxy 用):**
+
+```yaml
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+  db:
+    image: postgres:16
+```
+
+**proxy 用の `conoha-docker-compose.yml`:**
+
+```yaml
+services:
+  web:
+    build: .
+    expose:
+      - "3000"
+  db:
+    image: postgres:16
+```
+
+`expose:` はコンテナ内部ポートの宣言のみで、ホスト側にはバインドされません。conoha-proxy は同じ Docker ネットワーク内からコンテナに到達できるため、これで Blue/Green の並行デプロイが可能になります。
+
+::: tip 既存サンプルの検証について
+[conoha-cli-app-samples](https://github.com/crowdy/conoha-cli-app-samples) リポジトリのサンプルは主に no-proxy モードを想定しており、`ports:` 固定バインディングを持つものが多いです。proxy モードで使う場合は、上記の override パターンで `conoha-docker-compose.yml` を追加するのが実用的です。
+:::
+
 ## no-proxy モード
 
 `conoha.yml` / proxy / DNS が不要な最短経路。`docker compose up -d --build` をリモートで叩くのと等価で、TLS / Host ベースルーティングが不要なケース (テスト、社内ツール、非 HTTP サービス、ホビー用途) に向きます。
@@ -106,6 +145,10 @@ conoha app deploy my-server --app-name myapp --no-proxy
 ```
 
 `init` 時にマーカーが書かれるので、以降の `status` / `logs` / `stop` / `restart` / `destroy` はモードを再指定する必要はありません。
+
+::: warning `--app-name` は DNS-1123 ラベル
+`--app-name` には小文字英数字とハイフンのみを使ってください (アンダースコア不可、63 文字以内)。これは `conoha.yml` の `name` フィールドと同じ形式で、これを守らないと `init/deploy` と `destroy` のパス解決が食い違ってサーバー側の `/opt/conoha/<name>/` が残留することがあります ([conoha-cli#119](https://github.com/crowdy/conoha-cli/issues/119))。
+:::
 
 ::: warning Docker は事前導入が必要
 no-proxy `app init` は Docker / Compose の存在を **検証するだけ** でインストールはしません。Docker 未導入の VPS では `conoha server create --user-data ./install-docker.sh` 等で事前にインストールしてください。
