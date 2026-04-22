@@ -154,6 +154,59 @@ services:
     restart: unless-stopped
 ```
 
+::: warning `--app-name` は DNS-1123 ラベル
+`--app-name` には小文字英数字とハイフンのみを使ってください（アンダースコア不可、63 文字以内）。これは `conoha.yml` の `name` フィールドと同じ形式で、これを守らないと `--proxy` モードで `init/deploy` と `destroy` のパス解決が食い違い、サーバー側の `/opt/conoha/<name>/` が残留することがあります。
+:::
+
+## Blue/Green (`--proxy`) モードでの固定ポートバインディング回避
+
+`--proxy` モード（conoha-proxy と組み合わせる Blue/Green デプロイ）では、CLI が各スロットに**動的なホストポート**を割り当ててリバースプロキシ経由で公開します。したがって `compose.yml` に `ports: "3000:3000"` のような**ホスト側固定ポートバインディング**があると、2 回目のデプロイ（green slot）でホストポート競合が発生してデプロイが失敗します。
+
+対処法は 2 つあります:
+
+1. `compose.yml` の `ports:` を `expose:` に書き換える（シンプル・推奨）
+2. プロジェクトルートに **`conoha-docker-compose.yml`** を置いて `compose.yml` の代わりに使う（`compose.yml` を変更したくない場合）
+
+CLI は次の順にコンパイル対象ファイルを探すため、`conoha-docker-compose.yml` が存在すれば優先して使用されます:
+
+```
+conoha-docker-compose.yml → conoha-docker-compose.yaml →
+docker-compose.yml        → docker-compose.yaml        →
+compose.yml               → compose.yaml
+```
+
+### 書き換え例
+
+**元の `compose.yml`（`--no-proxy` 用）:**
+
+```yaml
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+  db:
+    image: postgres:16
+```
+
+**`--proxy` 用の `conoha-docker-compose.yml`:**
+
+```yaml
+services:
+  web:
+    build: .
+    expose:
+      - "3000"
+  db:
+    image: postgres:16
+```
+
+`expose:` はコンテナ内部ポートの宣言のみで、ホスト側にはバインドされません。conoha-proxy は同じ Docker ネットワーク内からコンテナに到達できるため、これで Blue/Green の並行デプロイが可能になります。
+
+::: tip 既存サンプルの検証について
+[conoha-cli-app-samples](https://github.com/crowdy/conoha-cli-app-samples) リポジトリのサンプルは主に `--no-proxy` モードを想定しており、`ports:` 固定バインディングを持つものが多いです。`--proxy` モードで使う場合は、上記の override パターンで `conoha-docker-compose.yml` を追加するのが実用的です。
+:::
+
 ## git push でデプロイする方法
 
 `app deploy` の代わりに `git push` でもデプロイできます。`app init` 実行時に表示されるコマンドを使います。
