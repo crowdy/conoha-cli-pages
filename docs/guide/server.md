@@ -34,14 +34,13 @@ conoha image list
 ### SSHキーペアを作成
 
 ```bash
-conoha keypair create --name mykey
+conoha keypair create mykey
 ```
 
-秘密鍵が表示されるので、ファイルに保存してください:
+秘密鍵は `~/.ssh/conoha_mykey` に自動保存されます。保存先を変更したい場合は `-o` オプションを指定してください:
 
 ```bash
-conoha keypair create --name mykey > ~/.ssh/conoha_mykey
-chmod 600 ~/.ssh/conoha_mykey
+conoha keypair create mykey -o ~/.ssh/my-custom-path
 ```
 
 ### サーバーを作成

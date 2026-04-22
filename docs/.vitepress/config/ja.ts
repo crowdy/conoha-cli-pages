@@ -79,6 +79,7 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
           items: [
             { text: 'auth', link: '/reference/auth' },
             { text: 'server', link: '/reference/server' },
+            { text: 'keypair', link: '/reference/keypair' },
             { text: 'volume', link: '/reference/volume' },
             { text: 'network', link: '/reference/network' },
             { text: 'app', link: '/reference/app' },
