@@ -2,6 +2,11 @@
 
 Laravel アプリを MySQL と組み合わせて ConoHa VPS にデプロイする手順です。Eloquent ORM による CRUD 機能を持つ投稿アプリを例に説明します。
 
+
+::: tip 本例は no-proxy モードで動作します
+[アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照してください。HTTPS / blue-green を使う場合は [Hello World](/examples/hello-world) や [Next.js](/examples/nextjs) の proxy モード版を参考にしてください。
+:::
+
 ## 完成イメージ
 
 - Laravel アプリが `http://<サーバーIP>` でアクセス可能
@@ -130,10 +135,10 @@ storage/logs/
 
 ```bash
 # 初期化（初回のみ）
-conoha app init <サーバー名> --app-name laravel-app
+conoha app init <サーバー名> --app-name laravel-app --no-proxy
 
 # デプロイ
-conoha app deploy <サーバー名> --app-name laravel-app
+conoha app deploy <サーバー名> --app-name laravel-app --no-proxy
 ```
 
 ## 7. 動作確認
@@ -158,7 +163,7 @@ conoha app env set <サーバー名> --app-name laravel-app \
   APP_KEY=base64:your-app-key
 
 # 再デプロイで反映
-conoha app deploy <サーバー名> --app-name laravel-app
+conoha app deploy <サーバー名> --app-name laravel-app --no-proxy
 ```
 
 ## コード更新
@@ -166,7 +171,7 @@ conoha app deploy <サーバー名> --app-name laravel-app
 コードやマイグレーションを変更したら、同じコマンドで再デプロイ:
 
 ```bash
-conoha app deploy <サーバー名> --app-name laravel-app
+conoha app deploy <サーバー名> --app-name laravel-app --no-proxy
 ```
 
 `bin/docker-entrypoint` で `php artisan migrate --force` が自動実行されるため、マイグレーションも自動で適用されます。

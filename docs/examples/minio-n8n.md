@@ -2,6 +2,11 @@
 
 MinIO（S3互換オブジェクトストレージ）とn8n（ワークフロー自動化）を組み合わせたセルフホスティング基盤をConoHa VPSにデプロイする手順です。
 
+
+::: tip 本例は no-proxy モードで動作します
+[アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照してください。HTTPS / blue-green を使う場合は [Hello World](/examples/hello-world) や [Next.js](/examples/nextjs) の proxy モード版を参考にしてください。
+:::
+
 ## 完成イメージ
 
 - MinIO コンソールが `http://<サーバーIP>:9001` でアクセス可能
@@ -66,7 +71,7 @@ volumes:
 
 ```bash
 # 初期化（初回のみ）
-conoha app init <サーバー名> --app-name minio-n8n
+conoha app init <サーバー名> --app-name minio-n8n --no-proxy
 
 # 環境変数を設定（パスワードを必ず変更してください）
 conoha app env set <サーバー名> --app-name minio-n8n \
@@ -76,7 +81,7 @@ conoha app env set <サーバー名> --app-name minio-n8n \
   N8N_PASSWORD=your_n8n_password
 
 # デプロイ
-conoha app deploy <サーバー名> --app-name minio-n8n
+conoha app deploy <サーバー名> --app-name minio-n8n --no-proxy
 ```
 
 ## 3. 動作確認
@@ -117,7 +122,7 @@ conoha app env set <サーバー名> --app-name minio-n8n \
   MINIO_ROOT_PASSWORD=new_secure_password
 
 # 再デプロイで反映
-conoha app deploy <サーバー名> --app-name minio-n8n
+conoha app deploy <サーバー名> --app-name minio-n8n --no-proxy
 ```
 
 ## コード更新
@@ -125,5 +130,5 @@ conoha app deploy <サーバー名> --app-name minio-n8n
 設定を変更したら、同じコマンドで再デプロイ:
 
 ```bash
-conoha app deploy <サーバー名> --app-name minio-n8n
+conoha app deploy <サーバー名> --app-name minio-n8n --no-proxy
 ```

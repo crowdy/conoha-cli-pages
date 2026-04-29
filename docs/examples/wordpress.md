@@ -2,6 +2,11 @@
 
 WordPressをConoHa VPSにデプロイする手順です。レンタルサーバーからVPSに移行したい方向け。
 
+
+::: tip 本例は no-proxy モードで動作します
+[アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照してください。HTTPS / blue-green を使う場合は [Hello World](/examples/hello-world) や [Next.js](/examples/nextjs) の proxy モード版を参考にしてください。
+:::
+
 ## 完成イメージ
 
 - WordPressが `http://<サーバーIP>` でアクセス可能
@@ -68,7 +73,7 @@ volumes:
 
 ```bash
 # 初期化
-conoha app init <サーバー名> --app-name wordpress
+conoha app init <サーバー名> --app-name wordpress --no-proxy
 
 # 環境変数を設定
 conoha app env set <サーバー名> --app-name wordpress \
@@ -76,7 +81,7 @@ conoha app env set <サーバー名> --app-name wordpress \
   MYSQL_ROOT_PASSWORD=your-root-password
 
 # デプロイ
-conoha app deploy <サーバー名> --app-name wordpress
+conoha app deploy <サーバー名> --app-name wordpress --no-proxy
 ```
 
 ## 5. 動作確認

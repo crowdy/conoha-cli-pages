@@ -2,6 +2,11 @@
 
 Ruby on RailsアプリをPostgreSQLと一緒にConoHa VPSにデプロイする手順です。
 
+
+::: tip 本例は no-proxy モードで動作します
+[アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照してください。HTTPS / blue-green を使う場合は [Hello World](/examples/hello-world) や [Next.js](/examples/nextjs) の proxy モード版を参考にしてください。
+:::
+
 ## 完成イメージ
 
 - Railsアプリが `http://<サーバーIP>` でアクセス可能
@@ -87,7 +92,7 @@ production:
 
 ```bash
 # 初期化
-conoha app init <サーバー名> --app-name myapp
+conoha app init <サーバー名> --app-name myapp --no-proxy
 
 # 環境変数を設定
 conoha app env set <サーバー名> --app-name myapp \
@@ -95,7 +100,7 @@ conoha app env set <サーバー名> --app-name myapp \
   SECRET_KEY_BASE=$(rails secret)
 
 # デプロイ
-conoha app deploy <サーバー名> --app-name myapp
+conoha app deploy <サーバー名> --app-name myapp --no-proxy
 ```
 
 ## 7. データベースのセットアップ

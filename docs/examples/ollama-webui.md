@@ -2,6 +2,11 @@
 
 Ollama と Open WebUI の公式 Docker イメージを使ったローカル LLM チャット環境を ConoHa VPS にデプロイするサンプルです。ブラウザから ChatGPT のような UI で LLM と会話できます。
 
+
+::: tip 本例は no-proxy モードで動作します
+[アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照してください。HTTPS / blue-green を使う場合は [Hello World](/examples/hello-world) や [Next.js](/examples/nextjs) の proxy モード版を参考にしてください。
+:::
+
 ## 完成イメージ
 
 - Open WebUI が `http://<サーバーIP>:3000` でアクセス可能
@@ -58,10 +63,10 @@ volumes:
 
 ```bash
 # 初期化（初回のみ）
-conoha app init <サーバー名> --app-name ollama-webui
+conoha app init <サーバー名> --app-name ollama-webui --no-proxy
 
 # デプロイ
-conoha app deploy <サーバー名> --app-name ollama-webui
+conoha app deploy <サーバー名> --app-name ollama-webui --no-proxy
 ```
 
 ## 3. 動作確認
@@ -93,7 +98,7 @@ entrypoint: ["/bin/sh", "-c", "ollama serve & sleep 5 && ollama pull llama3.2 &&
 変更後は再デプロイで反映されます。
 
 ```bash
-conoha app deploy <サーバー名> --app-name ollama-webui
+conoha app deploy <サーバー名> --app-name ollama-webui --no-proxy
 ```
 
 ## 認証を有効にする場合
@@ -113,7 +118,7 @@ environment:
 compose.yml を変更したら、同じコマンドで再デプロイ:
 
 ```bash
-conoha app deploy <サーバー名> --app-name ollama-webui
+conoha app deploy <サーバー名> --app-name ollama-webui --no-proxy
 ```
 
 ::: warning モデルデータの永続化

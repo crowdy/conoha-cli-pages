@@ -2,6 +2,11 @@
 
 Go と Fiber フレームワークで構築した高速 REST API サーバーを ConoHa VPS にデプロイする手順です。マルチステージビルドにより、最終イメージを最小限に抑えます。
 
+
+::: tip 本例は no-proxy モードで動作します
+[アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照してください。HTTPS / blue-green を使う場合は [Hello World](/examples/hello-world) や [Next.js](/examples/nextjs) の proxy モード版を参考にしてください。
+:::
+
 ## 完成イメージ
 
 - Go Fiber アプリが `http://<サーバーIP>:3000` でアクセス可能
@@ -208,10 +213,10 @@ services:
 
 ```bash
 # 初期化（初回のみ）
-conoha app init <サーバー名> --app-name go-api
+conoha app init <サーバー名> --app-name go-api --no-proxy
 
 # デプロイ
-conoha app deploy <サーバー名> --app-name go-api
+conoha app deploy <サーバー名> --app-name go-api --no-proxy
 ```
 
 ## 7. 動作確認
@@ -249,7 +254,7 @@ conoha app env set <サーバー名> --app-name go-api \
   LOG_LEVEL=info
 
 # 再デプロイで反映
-conoha app deploy <サーバー名> --app-name go-api
+conoha app deploy <サーバー名> --app-name go-api --no-proxy
 ```
 
 ## コード更新
@@ -257,7 +262,7 @@ conoha app deploy <サーバー名> --app-name go-api
 コードを変更したら、同じコマンドで再デプロイ:
 
 ```bash
-conoha app deploy <サーバー名> --app-name go-api
+conoha app deploy <サーバー名> --app-name go-api --no-proxy
 ```
 
 ## データベースを追加する場合

@@ -2,6 +2,11 @@
 
 Ory Hydra（OAuth2 / OpenID Connectサーバー）とPython（FastAPI）を組み合わせた認可サンプルをConoHa VPSにデプロイする手順です。HydraがOAuth2フローを処理し、PythonアプリがログインUI・同意画面の提供とトークン検証付きAPIを担当します。
 
+
+::: tip 本例は no-proxy モードで動作します
+[アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照してください。HTTPS / blue-green を使う場合は [Hello World](/examples/hello-world) や [Next.js](/examples/nextjs) の proxy モード版を参考にしてください。
+:::
+
 ## 完成イメージ
 
 - Hydra Public API が `http://<サーバーIP>:4444` でアクセス可能（OAuth2エンドポイント）
@@ -478,10 +483,10 @@ setup.sh
 
 ```bash
 # 初期化（初回のみ）
-conoha app init <サーバー名> --app-name hydra
+conoha app init <サーバー名> --app-name hydra --no-proxy
 
 # デプロイ
-conoha app deploy <サーバー名> --app-name hydra
+conoha app deploy <サーバー名> --app-name hydra --no-proxy
 ```
 
 ## 9. デプロイ後セットアップ（OAuth2クライアント登録）
@@ -586,7 +591,7 @@ curl http://<サーバーIP>:9010/api/public
 
 ```bash
 # compose.yml の SECRETS_SYSTEM を強力なシークレットに変更後、再デプロイ
-conoha app deploy <サーバー名> --app-name hydra
+conoha app deploy <サーバー名> --app-name hydra --no-proxy
 ```
 
 本番環境では以下を変更してください:
@@ -602,5 +607,5 @@ conoha app deploy <サーバー名> --app-name hydra
 コードを変更したら、同じコマンドで再デプロイ:
 
 ```bash
-conoha app deploy <サーバー名> --app-name hydra
+conoha app deploy <サーバー名> --app-name hydra --no-proxy
 ```
