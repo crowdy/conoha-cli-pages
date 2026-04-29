@@ -2,6 +2,11 @@
 
 FastAPIとOllamaを使って、セルフホスティングのAIチャットボットをConoHa VPSにデプロイする手順です。
 
+
+::: tip 本例は no-proxy モードで動作します
+[アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照してください。HTTPS / blue-green を使う場合は [Hello World](/examples/hello-world) や [Next.js](/examples/nextjs) の proxy モード版を参考にしてください。
+:::
+
 ## 完成イメージ
 
 - FastAPI製のチャットAPI が `http://<サーバーIP>` でアクセス可能
@@ -110,8 +115,8 @@ __pycache__
 ## 6. デプロイ
 
 ```bash
-conoha app init <サーバー名> --app-name chatbot
-conoha app deploy <サーバー名> --app-name chatbot
+conoha app init <サーバー名> --app-name chatbot --no-proxy
+conoha app deploy <サーバー名> --app-name chatbot --no-proxy
 ```
 
 ## 7. モデルをダウンロード

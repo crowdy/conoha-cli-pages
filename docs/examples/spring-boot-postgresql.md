@@ -2,6 +2,11 @@
 
 Spring Boot アプリを PostgreSQL と組み合わせて ConoHa VPS にデプロイする手順です。JPA による CRUD 機能を持つ投稿アプリを例に説明します。
 
+
+::: tip 本例は no-proxy モードで動作します
+[アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照してください。HTTPS / blue-green を使う場合は [Hello World](/examples/hello-world) や [Next.js](/examples/nextjs) の proxy モード版を参考にしてください。
+:::
+
 ## 完成イメージ
 
 - Spring Boot アプリが `http://<サーバーIP>:8080` でアクセス可能
@@ -280,10 +285,10 @@ target/
 
 ```bash
 # 初期化（初回のみ）
-conoha app init <サーバー名> --app-name spring-app
+conoha app init <サーバー名> --app-name spring-app --no-proxy
 
 # デプロイ
-conoha app deploy <サーバー名> --app-name spring-app
+conoha app deploy <サーバー名> --app-name spring-app --no-proxy
 ```
 
 ## 12. 動作確認
@@ -308,7 +313,7 @@ conoha app env set <サーバー名> --app-name spring-app \
   DB_NAME=your-db-name
 
 # 再デプロイで反映
-conoha app deploy <サーバー名> --app-name spring-app
+conoha app deploy <サーバー名> --app-name spring-app --no-proxy
 ```
 
 ## コード更新
@@ -316,7 +321,7 @@ conoha app deploy <サーバー名> --app-name spring-app
 コードを変更したら、同じコマンドで再デプロイ:
 
 ```bash
-conoha app deploy <サーバー名> --app-name spring-app
+conoha app deploy <サーバー名> --app-name spring-app --no-proxy
 ```
 
 `spring.jpa.hibernate.ddl-auto=update` の設定により、エンティティの変更はデプロイ時に自動でスキーマに反映されます。

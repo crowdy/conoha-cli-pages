@@ -2,6 +2,11 @@
 
 Vite + React で構築した SPA を nginx で ConoHa VPS に配信するサンプルです。フロントエンドプロジェクトのデプロイに最適です。
 
+
+::: tip 本例は no-proxy モードで動作します
+[アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照してください。HTTPS / blue-green を使う場合は [Hello World](/examples/hello-world) や [Next.js](/examples/nextjs) の proxy モード版を参考にしてください。
+:::
+
 ## 完成イメージ
 
 - Vite + React アプリが `http://<サーバーIP>` でアクセス可能
@@ -78,10 +83,10 @@ dist
 
 ```bash
 # 初期化（初回のみ）
-conoha app init <サーバー名> --app-name react-app
+conoha app init <サーバー名> --app-name react-app --no-proxy
 
 # デプロイ
-conoha app deploy <サーバー名> --app-name react-app
+conoha app deploy <サーバー名> --app-name react-app --no-proxy
 ```
 
 ## 7. 動作確認
@@ -105,7 +110,7 @@ conoha app env set <サーバー名> --app-name react-app \
   VITE_API_URL=https://api.example.com
 
 # 再デプロイで反映（ビルド時に埋め込まれるため再ビルドが必要）
-conoha app deploy <サーバー名> --app-name react-app
+conoha app deploy <サーバー名> --app-name react-app --no-proxy
 ```
 
 ## コード更新
@@ -113,5 +118,5 @@ conoha app deploy <サーバー名> --app-name react-app
 コードを変更したら、同じコマンドで再デプロイ:
 
 ```bash
-conoha app deploy <サーバー名> --app-name react-app
+conoha app deploy <サーバー名> --app-name react-app --no-proxy
 ```
