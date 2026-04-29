@@ -83,6 +83,7 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
             { text: 'volume', link: '/reference/volume' },
             { text: 'network', link: '/reference/network' },
             { text: 'app', link: '/reference/app' },
+            { text: 'proxy', link: '/reference/proxy' },
             { text: 'skill', link: '/reference/skill' },
           ],
         },
