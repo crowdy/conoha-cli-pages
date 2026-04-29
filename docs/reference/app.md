@@ -75,11 +75,12 @@ conoha app rollback <サーバー名> [flags]
 | オプション | 説明 |
 |-----------|------|
 | `--app-name` | アプリ名 |
+| `--proxy` | proxy モードを強制（マーカーと不一致ならエラー） |
+| `--no-proxy` | no-proxy モードを強制（`--proxy` と排他） |
 | `--target` | 単一ブロックのみロールバック: `web` または `expose:` の label（既定: 全ブロック） |
 | `--drain-ms` | 戻し先の drain 窓をミリ秒で上書き（`0` = proxy 既定） |
-| `--data-dir` | サーバー側 proxy データディレクトリ（デフォルト: `/var/lib/conoha-proxy`） |
-| `--proxy` / `--no-proxy` | モード強制 |
-| `--insecure` | known_hosts TOFU をスキップ |
+| `--data-dir` | サーバー側 conoha-proxy データディレクトリ（デフォルト: `/var/lib/conoha-proxy`） |
+| `--insecure` | known_hosts 検証をスキップ（TOFU を無効化） |
 | `--identity`, `-i` | SSH秘密鍵のパス |
 | `--user`, `-l` | SSHユーザー名（デフォルト: root） |
 | `--port`, `-p` | SSHポート（デフォルト: 22） |
