@@ -22,6 +22,7 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
             { text: 'サーバー管理', link: '/guide/server' },
             { text: 'アプリデプロイ', link: '/guide/app-deploy' },
             { text: 'アプリ管理', link: '/guide/app-management' },
+            { text: 'conoha-proxy セットアップ', link: '/guide/proxy-setup' },
             { text: 'Claude Code スキル', link: '/guide/skill' },
           ],
         },
