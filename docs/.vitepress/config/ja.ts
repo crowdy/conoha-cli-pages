@@ -98,6 +98,13 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
             { text: 'skill', link: '/reference/skill' },
           ],
         },
+        {
+          text: '付録',
+          items: [
+            { text: 'グローバルフラグ・環境変数', link: '/reference/global-flags' },
+            { text: '終了コード', link: '/reference/exit-codes' },
+          ],
+        },
       ],
     },
 
