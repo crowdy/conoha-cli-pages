@@ -1,6 +1,6 @@
 # proxy
 
-ConoHa VPS 上の [conoha-proxy](https://github.com/crowdy/conoha-proxy) リバースプロキシを管理するコマンドグループ。proxy モードで `conoha app deploy` を使う場合は先に `proxy boot` が必要。
+ConoHa VPS 上の [conoha-proxy](https://github.com/crowdy/conoha-proxy) リバースプロキシを管理するコマンドグループです。proxy モードで `conoha app deploy` を使う場合は先に `proxy boot` が必要。
 
 ## 共通オプション
 
@@ -56,15 +56,7 @@ conoha proxy reboot <サーバー名> --acme-email <メールアドレス> [flag
 
 ### オプション
 
-`boot` と同一のフラグを受け付けます。
-
-| オプション | 説明 |
-|-----------|------|
-| `--acme-email` | Let's Encrypt 登録用メールアドレス（**必須**） |
-| `--image` | conoha-proxy Docker イメージ（デフォルト: `ghcr.io/crowdy/conoha-proxy:latest`） |
-| `--data-dir` | ホスト側データディレクトリ（デフォルト: `/var/lib/conoha-proxy`） |
-| `--container` | Docker コンテナ名（デフォルト: `conoha-proxy`） |
-| `--wait-timeout` | コンテナがヘルシーになるまでの最大待機時間（デフォルト: `30s`、`0` で無効） |
+`boot` と同一（`--acme-email`, `--image`, `--data-dir`, `--container`, `--wait-timeout`）。
 
 ---
 
@@ -130,7 +122,7 @@ conoha proxy logs <サーバー名> [flags]
 
 ## proxy details
 
-バージョンと readiness を表示します。Admin API `/v1/version` を Unix socket 経由で取得した結果を出力します。
+バージョンと readiness を表示します。Admin API `/version` を Unix socket 経由で取得した結果を出力します。
 
 ### 使い方
 
