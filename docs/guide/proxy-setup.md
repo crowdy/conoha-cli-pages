@@ -26,6 +26,10 @@ conoha proxy boot my-server --acme-email ops@example.com
 
 タイムアウトした場合は直近 20 行のコンテナログが stderr に出力されます。フラグの全一覧は [proxy リファレンス](/reference/proxy) を参照してください。
 
+::: tip
+proxy のブートが終わったら、`conoha.yml` を用意して `conoha app init` → `conoha app deploy` でアプリをデプロイできます。詳細は [アプリデプロイ](/guide/app-deploy) を参照してください。
+:::
+
 ## ライフサイクル運用
 
 ### proxy reboot
@@ -37,7 +41,7 @@ conoha proxy reboot my-server --acme-email ops@example.com
 ```
 
 ::: warning
-`reboot` 時は `--acme-email` を再指定する必要があります（コンテナ設定は引き継がれません）。
+起動時のすべてのフラグ（`--acme-email` / `--image` / `--data-dir` など）を再指定する必要があります。コンテナ設定は引き継がれません。
 :::
 
 ### proxy start / stop / restart
@@ -83,6 +87,12 @@ conoha proxy logs my-server -f
 conoha proxy details my-server
 ```
 
+```
+Version: v0.6.2
+Ready: true
+Services: 3 registered
+```
+
 ### proxy services
 
 登録されているプロキシサービスの一覧を表示します。
@@ -92,10 +102,10 @@ conoha proxy services my-server
 ```
 
 ```
-NAME       HOSTS                  TARGET
-myapp      app.example.com        http://127.0.0.1:9001
-gitea      gitea.example.com      http://127.0.0.1:9012
-gitea-dex  dex.example.com        http://127.0.0.1:9015
+NAME                 PHASE      ACTIVE                         HOSTS
+myapp                green      http://127.0.0.1:9001          app.example.com
+gitea                green      http://127.0.0.1:9012          gitea.example.com
+gitea-dex            green      http://127.0.0.1:9015          dex.example.com
 ```
 
 `conoha app init` 済みのアプリと expose ブロックが `<アプリ名>` / `<アプリ名>-<label>` 形式で並びます。
