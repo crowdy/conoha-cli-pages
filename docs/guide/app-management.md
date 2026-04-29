@@ -1,6 +1,6 @@
 # アプリ管理
 
-デプロイしたアプリの環境変数管理、削除、一覧表示を行います。
+デプロイしたアプリの環境変数管理、ロールバック、削除、一覧表示を行います。デプロイ自体は [アプリデプロイ](/guide/app-deploy) を参照してください。
 
 ## 環境変数
 
@@ -11,6 +11,10 @@ conoha app env set <サーバー名> --app-name myapp DATABASE_URL=postgres://..
 ```
 
 複数の変数を一度に設定できます。
+
+::: warning proxy モードでの制限
+`app env set` は両モードで動きますが、**現状 proxy モードのデプロイには値が反映されません** ([#94](https://github.com/crowdy/conoha-cli/issues/94) で再設計予定)。proxy モードで実行すると `warning: app env has no effect on proxy-mode deployed slots` が出ます。proxy モードでは当面 compose ファイルの `environment:` / `env_file:` でアプリ設定を渡してください。
+:::
 
 ### 環境変数を確認
 
@@ -52,6 +56,32 @@ myapp                          no containers
 ```
 
 アプリ名とコンテナの状態（running / stopped / no containers）が表示されます。
+
+## ロールバック (proxy モードのみ)
+
+proxy モードのアプリは drain 窓内であれば直前のスロットに即時ロールバックできます。
+
+```bash
+conoha app rollback my-server --app-name hello-world
+```
+
+`expose:` ブロックを持つ multi-host アプリでは既定でルート + 全ブロックを宣言の逆順でロールバックします。drain 窓を過ぎたブロックは警告のみでスキップされ、残りは継続して処理されます。
+
+特定のブロックだけロールバックしたい場合は `--target` を使います。
+
+```bash
+# ルートだけ
+conoha app rollback my-server --target=web
+
+# expose ブロックだけ
+conoha app rollback my-server --target=dex
+```
+
+`--drain-ms <ms>` で戻し先の drain 窓を上書きできます (`0` で proxy 既定)。
+
+::: warning no-proxy モードでは利用不可
+no-proxy モードには blue/green swap が無いため `rollback` は使えません (`rollback is not supported in no-proxy mode` エラー)。コミットを checkout して再 deploy してください。
+:::
 
 ## アプリの削除
 
