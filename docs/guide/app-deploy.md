@@ -1,195 +1,140 @@
 # アプリデプロイ
 
-ConoHa CLIを使えば、Dockerfileがあるプロジェクトをコマンド一発でデプロイできます。
+`conoha app` は同一 VPS 上で共存可能な 2 つのデプロイモードを提供します。`app init` 時にサーバー側マーカー (`/opt/conoha/<name>/.conoha-mode`) が書かれ、以降の `deploy` / `status` / `logs` / `stop` / `restart` / `destroy` / `rollback` は自動的にそのモードで動作するため、2 回目以降はモードフラグを再指定する必要はありません。
 
-## 前提条件
+## モードの比較
 
-- サーバーが作成済み（[サーバー管理](/guide/server)を参照）
-- サーバーにDockerがインストール済み
-- プロジェクトに `Dockerfile` と `docker-compose.yml` がある
+|  | proxy (blue/green) | no-proxy (flat) |
+|---|---|---|
+| 既定 | ✓ |  |
+| 用途 | 公開アプリ + HTTPS | テスト・社内・非HTTP |
+| `conoha.yml` | 必要 | 不要 |
+| `conoha proxy boot` | 必要 | 不要 |
+| DNS | 必要 | 不要 |
+| TLS | Let's Encrypt 自動 | 自前で |
+| レイアウト | `/opt/conoha/<name>/<slot>/` | `/opt/conoha/<name>/` |
+| rollback | ✓ (drain 窓内) | × |
 
-## デプロイの流れ
+## proxy モード
 
+[conoha-proxy](https://github.com/crowdy/conoha-proxy) が Let's Encrypt HTTPS、Host ヘッダールーティング、drain 窓内の即時ロールバックを提供します。proxy 自体のセットアップは [conoha-proxy セットアップ](/guide/proxy-setup) を参照してください。
+
+### conoha.yml の作成
+
+レポジトリルートに `conoha.yml` を置きます。
+
+```yaml
+name: myapp                   # DNS-1123 ラベル (小文字英数字とハイフン、1-63 文字)
+hosts:
+  - app.example.com           # 複数指定可、重複不可
+web:
+  service: web                # compose ファイル内のサービス名と一致必須
+  port: 8080                  # コンテナ側のリッスンポート (1-65535)
+# --- 以下は任意 ---
+compose_file: docker-compose.yml   # 未指定時は conoha-docker-compose.yml → docker-compose.yml → compose.yml の順で自動検出
+accessories: [db, redis]           # web と同じネットワークに接続する副次サービス
+health:
+  path: /healthz
+  interval_ms: 1000
+  timeout_ms: 500
+  healthy_threshold: 2
+  unhealthy_threshold: 3
+deploy:
+  drain_ms: 5000                   # 旧スロットを落とすまでの drain 窓 (ミリ秒、未指定時は 30000)
 ```
-app init → app deploy → app logs で確認
-```
 
-## 1. アプリの初期化
-
-サーバー上にアプリの受け口を作成します。
+### proxy をブートしてアプリを登録
 
 ```bash
-conoha app init my-server --app-name hello-world
-```
+# 1. proxy コンテナを VPS にブート (既に済んでいればスキップ)
+conoha proxy boot my-server --acme-email ops@example.com
 
-```
-Initializing app "hello-world" on vm-18268c66-ae (133.88.116.147)...
-==> Installing Docker...
-==> Installing Docker Compose plugin...
-==> Installing git...
-==> Creating directories...
-Initialized empty Git repository in /opt/conoha/hello-world.git/
-==> Installing post-receive hook...
-==> Done!
+# 2. DNS の A レコードを VPS の IP に向ける
+#    (DNS が VPS を指していないと app init 自体は成功しても証明書発行が失敗し、
+#     ブラウザは TLS ハンドシェイク段階で接続失敗を表示します)
 
-App "hello-world" initialized on vm-18268c66-ae (133.88.116.147).
-
-Add the remote and deploy:
-  git remote add conoha root@133.88.116.147:/opt/conoha/hello-world.git
-  git push conoha main
-```
-
-Docker・Git のインストールとGitリポジトリの作成が自動で行われます。
-
-::: tip app deploy を使う場合
-`git push` の代わりに `conoha app deploy` でもデプロイできます。次のセクションでは `app deploy` を使う方法を紹介します。
-:::
-
-## 2. アプリのデプロイ
-
-プロジェクトのディレクトリで実行します。
-
-```bash
-cd /path/to/your/project
+# 3. アプリを proxy に登録してデプロイ
+conoha app init my-server
 conoha app deploy my-server
 ```
 
-```
-App name: hello-world
-Archiving current directory...
-Uploading to vm-18268c66-ae (133.88.116.147)...
-Building and starting containers...
- Image hello-world-web Building
- ...
- Image hello-world-web Built
- Container hello-world-web-1 Creating
- Container hello-world-web-1 Created
- Container hello-world-web-1 Starting
- Container hello-world-web-1 Started
-NAME                IMAGE             COMMAND                  SERVICE   CREATED                  STATUS                  PORTS
-hello-world-web-1   hello-world-web   "/docker-entrypoint.…"   web       Less than a second ago   Up Less than a second   0.0.0.0:80->80/tcp
-Deploy complete.
-```
-
-実行内容:
-1. プロジェクトファイルをtarで圧縮
-2. サーバーにSSHで転送
-3. `docker compose up -d --build` を実行
-
-`.dockerignore` があれば、記載されたファイルは除外されます。`.git/` ディレクトリは常に除外されます。
-
-## 3. 動作確認
-
-### ブラウザ/curlで確認
-
-サーバーのIPアドレスにアクセスします。
+ロールバック (drain 窓内のみ、旧スロットへ即時戻し):
 
 ```bash
-curl 133.88.116.147
+conoha app rollback my-server
 ```
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Hello ConoHa</title>
-</head>
-<body>
-  <h1>Hello from ConoHa!</h1>
-  <p>Deployed with <code>conoha app deploy</code></p>
-</body>
-</html>
-```
+### slot の自動 suffix
 
-::: tip IPアドレスの確認
-`conoha server show my-server` でサーバーのIPアドレスを確認できます。
-:::
+`--slot <id>` で slot ID を固定できます。規則は `[a-z0-9][a-z0-9-]{0,63}`、既定は git short SHA または timestamp。
 
-### ログを見る
+`--slot` を省略した場合、既定値が既存の compose プロジェクトと衝突したら CLI が自動で `-2` / `-3` と suffix を付けて衝突を回避します。drain 中のスロットを破壊的に上書きすることはありません。`--slot` を明示的に再利用したときだけ作業ディレクトリを削除してから再展開します。
 
-```bash
-conoha app logs <サーバー名> --app-name myapp
-```
+### multi-host / expose ブロック
 
-リアルタイムでフォロー:
-
-```bash
-conoha app logs <サーバー名> --app-name myapp --follow
-```
-
-### ステータス確認
-
-```bash
-conoha app status <サーバー名> --app-name myapp
-```
-
-コンテナの状態（running/stopped）が表示されます。
-
-## アプリの再デプロイ
-
-コードを変更したら、同じコマンドで再デプロイできます:
-
-```bash
-conoha app deploy <サーバー名> --app-name myapp
-```
-
-## アプリの停止・再起動
-
-```bash
-# 停止
-conoha app stop <サーバー名> --app-name myapp
-
-# 再起動
-conoha app restart <サーバー名> --app-name myapp
-```
-
-## docker-compose.yml の例
+ルートと別ホスト名で公開したいサブドメイン (Dex / admin UI / webhook 受信など) は `expose:` ブロックで宣言できます。各ブロックは独立した proxy service (`<name>-<label>`) として登録されます。
 
 ```yaml
-services:
-  web:
-    build: .
-    ports:
-      - "80:3000"
-    restart: unless-stopped
+name: gitea
+hosts: [gitea.example.com]
+web:
+  service: gitea
+  port: 3000
+expose:
+  - label: dex                    # proxy service name サフィックス (<name>-<label>)
+    host: dex.example.com         # hosts[] 重複不可 / 他 expose とも重複不可
+    service: dex                  # compose service 名 (accessories / web.service と排他)
+    port: 5556
+    blue_green: false             # true (既定) なら slot 回転対象、false はアクセサリ扱い (単発起動)
+accessories: [db]
 ```
 
-## git push でデプロイする方法
+- `app status <server>` はルートと各 expose ブロックを 1 表にまとめ、`--format json` で `{root, expose: [...]}` を返します。
+- `app rollback <server>` は既定でルート → expose 逆順で全ブロックをロールバックします。`--target=<label>` (または `--target=web`) で個別指定も可能。drain 窓が閉じているブロックは警告のみでスキップされ、残りのブロックは継続して処理されます。
+- 旧 CLI (< v0.6.0) は `expose:` を silently 無視します。multi-host を使う場合は CI で CLI の最低バージョンを v0.6.0 以上に固定してください。
 
-`app deploy` の代わりに `git push` でもデプロイできます。`app init` 実行時に表示されるコマンドを使います。
+## no-proxy モード
 
-### SSH設定
-
-`git push` を使うには、`~/.ssh/config` にサーバーのエントリが必要です。`conoha keypair create` で作成したキーを指定します:
-
-```
-Host conoha
-    HostName 133.88.116.147
-    User root
-    IdentityFile ~/.ssh/conoha_my-key
-```
-
-### リモートの追加とpush
+`conoha.yml` / proxy / DNS が不要な最短経路。`docker compose up -d --build` をリモートで叩くのと等価で、TLS / Host ベースルーティングが不要なケース (テスト、社内ツール、非 HTTP サービス、ホビー用途) に向きます。
 
 ```bash
-git remote add conoha conoha:/opt/conoha/hello-world.git
-git push conoha main
+# 初期化 (Docker / Compose の存在を検証してマーカーを書き込む。インストールは行わない)
+conoha app init my-server --app-name myapp --no-proxy
+
+# デプロイ (カレントディレクトリを tar 転送 → /opt/conoha/myapp/ に展開 → docker compose up -d --build)
+conoha app deploy my-server --app-name myapp --no-proxy
 ```
 
-```
-Enumerating objects: 180, done.
-...
-remote: ==> Checking out main...
-remote: Switched to branch 'main'
-To conoha:/opt/conoha/hello-world.git
- * [new branch]      main -> main
-```
+`init` 時にマーカーが書かれるので、以降の `status` / `logs` / `stop` / `restart` / `destroy` はモードを再指定する必要はありません。
 
-::: warning IPアドレス直指定は非推奨
-`root@133.88.116.147:/opt/conoha/...` 形式では SSH鍵が自動選択されず `Permission denied` になることがあります。SSH config のホスト名を使いましょう。
+::: warning Docker は事前導入が必要
+no-proxy `app init` は Docker / Compose の存在を **検証するだけ** でインストールはしません。Docker 未導入の VPS では `conoha server create --user-data ./install-docker.sh` 等で事前にインストールしてください。
 :::
 
-## 次のステップ
+再デプロイ時の tar 展開は **上書きのみ** 行い、リポジトリから消したファイルはサーバー上に残り続けます (`.env.server` や名前付きボリュームの bind mount を守るため意図的にそうしています)。古いファイルを掃除する場合は `ssh <server> rm /opt/conoha/<name>/<path>` で個別に削除してください。
 
+no-proxy モードには blue/green swap が存在しないため、`rollback` は利用できません (実行すると `rollback is not supported in no-proxy mode` エラー)。履歴から戻したい場合は該当コミットを checkout して `deploy` し直してください。
+
+## モードの切り替え
+
+既存のアプリのモードを変更するには、一度破棄してから反対のモードで再 `init` します。
+
+```bash
+conoha app destroy my-server --app-name myapp          # マーカーとディレクトリを削除
+conoha app init my-server --app-name myapp --no-proxy  # 反対モードで再初期化
+```
+
+同一 VPS 上で `<app-name>` が異なれば proxy / no-proxy を並列に共存させられます。
+
+## 環境変数
+
+`conoha app env set` は両モードで動作してサーバー側の `/opt/conoha/<app>.env.server` に書き込みますが、**現状 `app env` による値の反映はデプロイ時 `.env` 合成を行う no-proxy モードでのみ有効です**。proxy モードで `app env set` すると `warning: app env has no effect on proxy-mode deployed slots; see #94 for the redesign` が出ます ([#94](https://github.com/crowdy/conoha-cli/issues/94) で再設計予定)。proxy モードでは当面 compose ファイルの `environment:` / `env_file:` でアプリ設定を渡してください。
+
+詳細は [アプリ管理](/guide/app-management) を参照してください。
+
+## 関連ページ
+
+- [conoha-proxy セットアップ](/guide/proxy-setup) — proxy 側のインストール・運用
 - [アプリ管理](/guide/app-management) — 環境変数・削除・一覧
-- [実践デプロイ例](/examples/nextjs) — フレームワーク別のデプロイ手順
+- [`app` リファレンス](/reference/app) — フラグ詳細
+- [`proxy` リファレンス](/reference/proxy) — proxy コマンドのフラグ詳細

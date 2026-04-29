@@ -20,6 +20,10 @@ conoha app init <サーバー名> [flags]
 | `--identity`, `-i` | SSH秘密鍵のパス |
 | `--user`, `-l` | SSHユーザー名（デフォルト: root） |
 | `--port`, `-p` | SSHポート（デフォルト: 22） |
+| `--proxy` | proxy モードを強制（マーカーと不一致ならエラー） |
+| `--no-proxy` | no-proxy モードを強制（`--proxy` と排他） |
+| `--data-dir` | サーバー側 conoha-proxy データディレクトリ（デフォルト: `/var/lib/conoha-proxy`） |
+| `--insecure` | known_hosts 検証をスキップ（TOFU を無効化） |
 
 ---
 
@@ -41,6 +45,11 @@ conoha app deploy <サーバー名> [flags]
 | `--identity`, `-i` | SSH秘密鍵のパス |
 | `--user`, `-l` | SSHユーザー名（デフォルト: root） |
 | `--port`, `-p` | SSHポート（デフォルト: 22） |
+| `--proxy` | proxy モードを強制（マーカーと不一致ならエラー） |
+| `--no-proxy` | no-proxy モードを強制（`--proxy` と排他） |
+| `--slot` | slot ID を固定（既定: git short SHA / timestamp、`[a-z0-9][a-z0-9-]{0,63}` 制約） |
+| `--data-dir` | サーバー側 conoha-proxy データディレクトリ（デフォルト: `/var/lib/conoha-proxy`） |
+| `--insecure` | known_hosts 検証をスキップ（TOFU を無効化） |
 
 ### 動作
 
@@ -48,6 +57,45 @@ conoha app deploy <サーバー名> [flags]
 2. サーバーにSSHで転送
 3. `.env.server` があれば `.env` にコピー
 4. `docker compose up -d --build` を実行
+
+---
+
+## app rollback
+
+drain 窓内に直前のスロットへ即時ロールバックします（proxy モードのみ）。`expose:` ブロックを持つ multi-host アプリでは既定でルート + 全ブロックを逆順にロールバックします。
+
+### 使い方
+
+```bash
+conoha app rollback <サーバー名> [flags]
+```
+
+### オプション
+
+| オプション | 説明 |
+|-----------|------|
+| `--app-name` | アプリ名 |
+| `--proxy` | proxy モードを強制（マーカーと不一致ならエラー） |
+| `--no-proxy` | no-proxy モードを強制（`--proxy` と排他） |
+| `--target` | 単一ブロックのみロールバック: `web` または `expose:` の label（既定: 全ブロック） |
+| `--drain-ms` | 戻し先の drain 窓をミリ秒で上書き（`0` = proxy 既定） |
+| `--data-dir` | サーバー側 conoha-proxy データディレクトリ（デフォルト: `/var/lib/conoha-proxy`） |
+| `--insecure` | known_hosts 検証をスキップ（TOFU を無効化） |
+| `--identity`, `-i` | SSH秘密鍵のパス |
+| `--user`, `-l` | SSHユーザー名（デフォルト: root） |
+| `--port`, `-p` | SSHポート（デフォルト: 22） |
+
+### 動作
+
+1. proxy 側に旧スロットがまだ drain 中であることを確認
+2. Admin API 経由で target_url を旧スロットに切り戻し
+3. drain 窓を `--drain-ms`（または既定）に再設定
+4. multi-host アプリで `--target` 未指定時は expose ブロックを宣言の逆順で同様に切り戻し（窓が閉じたブロックは警告のみで継続）
+
+### 制限
+
+- no-proxy モードでは利用不可（実行すると `rollback is not supported in no-proxy mode` エラー）
+- drain 窓を過ぎたスロットはロールバック不能。コミットを checkout して再 deploy してください
 
 ---
 
@@ -72,6 +120,9 @@ conoha app logs <サーバー名> [flags]
 | `--identity`, `-i` | SSH秘密鍵のパス |
 | `--user`, `-l` | SSHユーザー名（デフォルト: root） |
 | `--port`, `-p` | SSHポート（デフォルト: 22） |
+| `--proxy` | proxy モードを強制（マーカーと不一致ならエラー） |
+| `--no-proxy` | no-proxy モードを強制（`--proxy` と排他） |
+| `--insecure` | known_hosts 検証をスキップ（TOFU を無効化） |
 
 ---
 
@@ -93,6 +144,23 @@ conoha app status <サーバー名> [flags]
 | `--identity`, `-i` | SSH秘密鍵のパス |
 | `--user`, `-l` | SSHユーザー名（デフォルト: root） |
 | `--port`, `-p` | SSHポート（デフォルト: 22） |
+| `--proxy` | proxy モードを強制（マーカーと不一致ならエラー） |
+| `--no-proxy` | no-proxy モードを強制（`--proxy` と排他） |
+| `--data-dir` | サーバー側 conoha-proxy データディレクトリ（デフォルト: `/var/lib/conoha-proxy`） |
+| `--insecure` | known_hosts 検証をスキップ（TOFU を無効化） |
+
+### `--format json` のスキーマ
+
+```json
+{
+  "root": { "service": "web", "containers": [...] },
+  "expose": [
+    { "label": "dex", "service": "dex", "containers": [...] }
+  ]
+}
+```
+
+`expose` ブロックを持たないアプリでは `"expose": []`。`conoha.yml` がローカルにない場合は `root` のみが返り、`expose` フィールドは省略されます（v0.7.0+ の graceful degrade）。
 
 ---
 
@@ -114,6 +182,9 @@ conoha app stop <サーバー名> [flags]
 | `--identity`, `-i` | SSH秘密鍵のパス |
 | `--user`, `-l` | SSHユーザー名（デフォルト: root） |
 | `--port`, `-p` | SSHポート（デフォルト: 22） |
+| `--proxy` | proxy モードを強制（マーカーと不一致ならエラー） |
+| `--no-proxy` | no-proxy モードを強制（`--proxy` と排他） |
+| `--insecure` | known_hosts 検証をスキップ（TOFU を無効化） |
 
 ---
 
@@ -135,6 +206,9 @@ conoha app restart <サーバー名> [flags]
 | `--identity`, `-i` | SSH秘密鍵のパス |
 | `--user`, `-l` | SSHユーザー名（デフォルト: root） |
 | `--port`, `-p` | SSHポート（デフォルト: 22） |
+| `--proxy` | proxy モードを強制（マーカーと不一致ならエラー） |
+| `--no-proxy` | no-proxy モードを強制（`--proxy` と排他） |
+| `--insecure` | known_hosts 検証をスキップ（TOFU を無効化） |
 
 ---
 
@@ -271,6 +345,10 @@ conoha app destroy <サーバー名> [flags]
 | `--identity`, `-i` | SSH秘密鍵のパス |
 | `--user`, `-l` | SSHユーザー名（デフォルト: root） |
 | `--port`, `-p` | SSHポート（デフォルト: 22） |
+| `--proxy` | proxy モードを強制（マーカーと不一致ならエラー） |
+| `--no-proxy` | no-proxy モードを強制（`--proxy` と排他） |
+| `--data-dir` | サーバー側 conoha-proxy データディレクトリ（デフォルト: `/var/lib/conoha-proxy`） |
+| `--insecure` | known_hosts 検証をスキップ（TOFU を無効化） |
 
 ### 削除されるもの
 
@@ -300,6 +378,11 @@ conoha app reset <サーバー名> [flags]
 | `--identity`, `-i` | SSH秘密鍵のパス |
 | `--user`, `-l` | SSHユーザー名（デフォルト: root） |
 | `--port`, `-p` | SSHポート（デフォルト: 22） |
+| `--proxy` | proxy モードを強制（マーカーと不一致ならエラー） |
+| `--no-proxy` | no-proxy モードを強制（`--proxy` と排他） |
+| `--slot` | slot ID を固定（既定: git short SHA / timestamp、`[a-z0-9][a-z0-9-]{0,63}` 制約） |
+| `--data-dir` | サーバー側 conoha-proxy データディレクトリ（デフォルト: `/var/lib/conoha-proxy`） |
+| `--insecure` | known_hosts 検証をスキップ（TOFU を無効化） |
 
 ### 動作
 
