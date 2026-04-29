@@ -30,6 +30,13 @@ export const en: LocaleSpecificConfig<DefaultTheme.Config> = {
             { text: 'proxy', link: '/en/reference/proxy' },
           ],
         },
+        {
+          text: 'Appendix',
+          items: [
+            { text: 'Global flags / env vars', link: '/en/reference/global-flags' },
+            { text: 'Exit codes', link: '/en/reference/exit-codes' },
+          ],
+        },
       ],
     },
 

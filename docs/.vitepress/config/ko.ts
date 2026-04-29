@@ -30,6 +30,13 @@ export const ko: LocaleSpecificConfig<DefaultTheme.Config> = {
             { text: 'proxy', link: '/ko/reference/proxy' },
           ],
         },
+        {
+          text: '부록',
+          items: [
+            { text: '글로벌 플래그 / 환경 변수', link: '/ko/reference/global-flags' },
+            { text: '종료 코드', link: '/ko/reference/exit-codes' },
+          ],
+        },
       ],
     },
 
