@@ -78,3 +78,28 @@ App "hello-world" destroyed.
 - Gitリポジトリ（`/opt/conoha/myapp.git/`）
 - 環境変数ファイル（`/opt/conoha/myapp.env.server`）
 :::
+
+## クリーンな状態から再デプロイ
+
+`app reset` は `app destroy` → `app init` → `app deploy` を1コマンドにまとめたものです。デプロイ状態を破棄して、現在の `conoha.yml` とリポジトリを最初から適用し直したいときに使います。
+
+```bash
+conoha app reset my-server --app-name hello-world
+```
+
+```
+Reset app "hello-world" on vm-18268c66-ae? All data will be deleted and re-deployed. [y/N]: y
+==> Phase 1/3: destroying current deployment
+==> Phase 2/3: re-initializing
+==> Phase 3/3: deploying
+```
+
+CI や AI エージェントなどの非対話環境では `--yes` を付けて実行します:
+
+```bash
+conoha app reset my-server --app-name hello-world --yes
+```
+
+::: warning
+`app destroy` と同様にデータがすべて消えます。残しておきたい環境変数があれば、事前に `app env list` で控えておいてください。
+:::
