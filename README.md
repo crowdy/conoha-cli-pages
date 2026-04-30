@@ -1,5 +1,7 @@
 # ConoHa CLI Documentation
 
+![ConoHa CLI](docs/public/banner.svg)
+
 [`conoha-cli`](https://github.com/crowdy/conoha-cli) 公式ドキュメントサイトのソース。VitePress で構築し、GitHub Pages にデプロイされます。
 
 **サイト**: https://crowdy.github.io/conoha-cli-pages/
