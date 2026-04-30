@@ -4,6 +4,9 @@ hero:
   name: ConoHa CLI
   text: ConoHa VPS3をコマンドラインから操作
   tagline: サーバー作成からアプリデプロイまで、すべてターミナルから
+  image:
+    src: /banner.svg
+    alt: ConoHa CLI
   actions:
     - theme: brand
       text: はじめに
