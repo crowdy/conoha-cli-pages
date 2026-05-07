@@ -33,7 +33,7 @@ services:
       - GITEA__database__HOST=db:5432
       - GITEA__database__NAME=gitea
       - GITEA__database__USER=gitea
-      - GITEA__database__PASSWD=${DB_PASSWORD:-gitea}
+      - GITEA__database__PASSWD=${DB_PASSWORD:?required}
     volumes:
       - gitea_data:/data
     depends_on:
@@ -44,7 +44,7 @@ services:
     image: postgres:17-alpine
     environment:
       - POSTGRES_USER=gitea
-      - POSTGRES_PASSWORD=${DB_PASSWORD:-gitea}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:?required}
       - POSTGRES_DB=gitea
     volumes:
       - db_data:/var/lib/postgresql/data

@@ -276,7 +276,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgres://user:pass@db:5432/mydb
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
     depends_on:
       db:
         condition: service_healthy
@@ -284,7 +284,7 @@ services:
   db:
     image: postgres:17-alpine
     environment:
-      - POSTGRES_PASSWORD=pass
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?required}
       - POSTGRES_USER=user
       - POSTGRES_DB=mydb
     volumes:

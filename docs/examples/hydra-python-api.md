@@ -78,7 +78,7 @@ services:
       - URLS_SELF_ISSUER=http://localhost:4444
       - URLS_LOGIN=http://localhost:9010/login
       - URLS_CONSENT=http://localhost:9010/consent
-      - SECRETS_SYSTEM=a-very-secret-key-that-must-be-changed
+      - SECRETS_SYSTEM=${HYDRA_SYSTEM_SECRET:?at least 16 chars}
       - LOG_LEVEL=info
     command: serve all --dev
     depends_on:
@@ -111,7 +111,7 @@ services:
     image: postgres:17-alpine
     environment:
       - POSTGRES_USER=hydra
-      - POSTGRES_PASSWORD=hydra
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?required}
       - POSTGRES_DB=hydra
     volumes:
       - db_data:/var/lib/postgresql/data

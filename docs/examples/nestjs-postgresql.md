@@ -261,7 +261,7 @@ services:
     environment:
       - DB_HOST=db
       - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - DB_PASSWORD=${DB_PASSWORD:?required}
       - DB_NAME=app_production
     depends_on:
       db:
@@ -270,7 +270,7 @@ services:
   db:
     image: postgres:17-alpine
     environment:
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?required}
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
