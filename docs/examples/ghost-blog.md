@@ -34,7 +34,7 @@ services:
       - database__client=mysql
       - database__connection__host=db
       - database__connection__user=ghost
-      - database__connection__password=${GHOST_DB_PASSWORD:-ghost}
+      - database__connection__password=${GHOST_DB_PASSWORD:?required}
       - database__connection__database=ghost
     volumes:
       - ghost_data:/var/lib/ghost/content
@@ -45,10 +45,10 @@ services:
   db:
     image: mysql:8.0
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-rootpassword}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:?required}
       - MYSQL_DATABASE=ghost
       - MYSQL_USER=ghost
-      - MYSQL_PASSWORD=${GHOST_DB_PASSWORD:-ghost}
+      - MYSQL_PASSWORD=${GHOST_DB_PASSWORD:?required}
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:

@@ -91,7 +91,7 @@ services:
       - DB_HOST=db
       - DB_DATABASE=laravel
       - DB_USERNAME=laravel
-      - DB_PASSWORD=laravel
+      - DB_PASSWORD=${DB_PASSWORD:?required}
     depends_on:
       db:
         condition: service_healthy
@@ -99,10 +99,10 @@ services:
   db:
     image: mysql:8.0
     environment:
-      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:?required}
       - MYSQL_DATABASE=laravel
       - MYSQL_USER=laravel
-      - MYSQL_PASSWORD=laravel
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:?required}
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:

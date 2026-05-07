@@ -34,7 +34,7 @@ services:
       - "9001:9001"
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:?required min 8 chars}
     volumes:
       - minio_data:/data
     command: server /data --console-address ":9001"
@@ -51,7 +51,7 @@ services:
     environment:
       - N8N_BASIC_AUTH_ACTIVE=true
       - N8N_BASIC_AUTH_USER=${N8N_USER:-admin}
-      - N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD:-admin}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD:?required}
       - N8N_PROTOCOL=http
       - N8N_HOST=0.0.0.0
       - N8N_PORT=5678
