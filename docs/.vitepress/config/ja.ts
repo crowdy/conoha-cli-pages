@@ -57,6 +57,7 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
           items: [
             { text: 'FastAPI + AIチャットボット', link: '/examples/fastapi-ai-chatbot' },
             { text: 'Ollama + Open WebUI', link: '/examples/ollama-webui' },
+            { text: 'vLLM (OpenAI 互換, L4 GPU)', link: '/examples/vllm-gpu' },
           ],
         },
         {
