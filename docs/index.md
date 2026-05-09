@@ -28,10 +28,8 @@ features:
 ### 1. インストール
 
 ```bash
-brew install crowdy/tap/conoha-cli
-```
-```
-✓ conoha-cli installed
+brew install crowdy/tap/conoha-cli   # 実行ファイルは conoha
+conoha version
 ```
 
 ### 2. ログイン
