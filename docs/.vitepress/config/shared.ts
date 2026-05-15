@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export const shared = defineConfig({
   title: 'ConoHa CLI',
-  base: '/conoha-cli-pages/',
+  base: '/',
   lastUpdated: true,
   cleanUrls: true,
   srcExclude: ['**/superpowers/**'],
