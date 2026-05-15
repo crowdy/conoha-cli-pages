@@ -23,6 +23,69 @@ features:
     details: サーバー・ネットワーク・DNS・ストレージ・ロードバランサーまで全API対応。
 ---
 
+## 何が作れる？
+
+[crowdy/conoha-cli-app-samples](https://github.com/crowdy/conoha-cli-app-samples) には **50+ のサンプル** が揃っています。すべて `git clone` → `conoha app deploy` だけで HTTPS 付きで起動します。
+
+### AI / GPU
+
+L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
+
+| サンプル | できること |
+|---|---|
+| [ollama-webui-gpu](https://github.com/crowdy/conoha-cli-app-samples/tree/main/ollama-webui-gpu) | Gemma 4 など大規模 LLM をブラウザでチャット (Open WebUI) |
+| [vllm-gpu](https://github.com/crowdy/conoha-cli-app-samples/tree/main/vllm-gpu) | Qwen2.5-7B AWQ で **OpenAI 互換 API**、SSE ストリーミング対応 |
+| [hunyuan3d-gpu](https://github.com/crowdy/conoha-cli-app-samples/tree/main/hunyuan3d-gpu) | 画像から 3D モデル (GLB) を生成 (Tencent Hunyuan3D-2) |
+| [fish-speech-tts-gpu](https://github.com/crowdy/conoha-cli-app-samples/tree/main/fish-speech-tts-gpu) | 音声クローニング付き TTS + Go CLI クライアント |
+| [dify-https](https://github.com/crowdy/conoha-cli-app-samples/tree/main/dify-https) | AI ワークフロープラットフォーム (Dify) |
+
+### セルフホスティング SaaS
+
+外部 SaaS を自前で。OIDC 認証や DB は `accessories:` に書くだけ。
+
+| サンプル | できること |
+|---|---|
+| [gitea](https://github.com/crowdy/conoha-cli-app-samples/tree/main/gitea) | OIDC 認証付きの自前 Git ホスティング |
+| [supabase-selfhost](https://github.com/crowdy/conoha-cli-app-samples/tree/main/supabase-selfhost) | Supabase をフルセット (Studio + Kong + GoTrue + PostgREST) |
+| [immich](https://github.com/crowdy/conoha-cli-app-samples/tree/main/immich) | Google フォト代替の写真バックアップ |
+| [outline](https://github.com/crowdy/conoha-cli-app-samples/tree/main/outline) | Notion 風チームナレッジベース (OIDC 認証付き) |
+| [ghost-blog](https://github.com/crowdy/conoha-cli-app-samples/tree/main/ghost-blog) | Ghost + MySQL でブログ運営 |
+| [plausible-analytics](https://github.com/crowdy/conoha-cli-app-samples/tree/main/plausible-analytics) | プライバシー重視の Web アナリティクス |
+
+### 開発インフラ・運用
+
+| サンプル | できること |
+|---|---|
+| [coolify](https://github.com/crowdy/conoha-cli-app-samples/tree/main/coolify) / [dokploy](https://github.com/crowdy/conoha-cli-app-samples/tree/main/dokploy) | セルフホスティング PaaS (Heroku/Vercel 代替) |
+| [github-actions-runner](https://github.com/crowdy/conoha-cli-app-samples/tree/main/github-actions-runner) | セルフホスト Actions Runner (GPU 利用も可) |
+| [github-pr-doc-reviewer](https://github.com/crowdy/conoha-cli-app-samples/tree/main/github-pr-doc-reviewer) | PR の spec / ADR / glossary 整合性を Claude が自動レビュー |
+| [prometheus-grafana](https://github.com/crowdy/conoha-cli-app-samples/tree/main/prometheus-grafana) | メトリクス監視・可視化スタック |
+| [quickwit-otel](https://github.com/crowdy/conoha-cli-app-samples/tree/main/quickwit-otel) | OpenTelemetry ログ・トレース基盤 + Grafana |
+| [uptime-kuma](https://github.com/crowdy/conoha-cli-app-samples/tree/main/uptime-kuma) | セルフホスティング稼働監視 |
+
+### フルスタックウェブ
+
+| サンプル | できること |
+|---|---|
+| [nextjs-fastapi-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/nextjs-fastapi-postgresql) | Next.js + FastAPI + PostgreSQL の CRUD ひな型 |
+| [rails-mercari](https://github.com/crowdy/conoha-cli-app-samples/tree/main/rails-mercari) | Rails で作るメルカリ風マーケットプレイス (OIDC 認証 + Sidekiq) |
+| [django-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/django-postgresql) | Django ORM + 管理画面 |
+| [spring-boot-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/spring-boot-postgresql) | Spring Boot + JPA CRUD |
+| [bun-elysia-chat](https://github.com/crowdy/conoha-cli-app-samples/tree/main/bun-elysia-chat) | Bun + Elysia の WebSocket リアルタイムチャット |
+| [hono-drizzle-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/hono-drizzle-postgresql) | Hono + Drizzle REST API + Swagger UI |
+
+### ちょっと変わったもの
+
+| サンプル | できること |
+|---|---|
+| [dns-server](https://github.com/crowdy/conoha-cli-app-samples/tree/main/dns-server) | PowerDNS + CRUD API で個人 DNS ホスティング |
+| [line-api-mock](https://github.com/crowdy/conoha-cli-app-samples/tree/main/line-api-mock) | LINE Messaging API のローカル開発用モック (Webhook エミュレーション) |
+| [slurm-rest-api](https://github.com/crowdy/conoha-cli-app-samples/tree/main/slurm-rest-api) | Slurm 単一ノードクラスター + REST API (JWT 認証) |
+| [nextjs-go-google_ucp](https://github.com/crowdy/conoha-cli-app-samples/tree/main/nextjs-go-google_ucp) | Google UCP デモ (AI エージェントコマース) |
+| [hydra-python-api](https://github.com/crowdy/conoha-cli-app-samples/tree/main/hydra-python-api) | Ory Hydra で OAuth2 認可サーバーを自前運用 |
+
+→ [全 50+ サンプルを一覧する](https://github.com/crowdy/conoha-cli-app-samples)
+
 ## 5ステップでデプロイ
 
 ### 1. インストール
