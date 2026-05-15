@@ -153,6 +153,10 @@ conoha network security-group create --name <名前> [--description <説明>]
 conoha network security-group delete <セキュリティグループ名またはID>
 ```
 
+::: tip v0.8.0 以降の互換性
+`security-group show` / `security-group delete` は v0.8.0 以降、ID だけでなくセキュリティグループ名でも指定できます ([crowdy/conoha-cli#194](https://github.com/crowdy/conoha-cli/pull/198))。v0.7.x までは UUID 必須でした。
+:::
+
 ---
 
 ## network security-group-rule

@@ -16,12 +16,28 @@ conoha image list
 
 ## image show
 
-特定イメージの詳細を表示します。
+特定イメージの詳細を表示します。v0.8.0 以降は **イメージ名・部分文字列・ID** のいずれかで指定できます ([crowdy/conoha-cli#190](https://github.com/crowdy/conoha-cli/pull/201))。
 
 ### 使い方
 
 ```bash
-conoha image show <id>
+conoha image show <名前 | 部分文字列 | ID>
+```
+
+### 例
+
+```bash
+# UUID で指定
+conoha image show aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+
+# 完全な名前
+conoha image show vmi-docker-29-ubuntu-24.04-amd64
+
+# 部分文字列（一意に解決できる場合のみ。曖昧時は候補一覧を表示）
+conoha image show docker-29
+
+# image list と組み合わせて絞り込み → show
+conoha image list --format table | grep ubuntu-24.04
 ```
 
 ---

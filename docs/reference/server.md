@@ -63,6 +63,47 @@ conoha server list --filter status=ACTIVE
 conoha server show <サーバー名またはID>
 ```
 
+### 例
+
+```bash
+# テーブル形式
+conoha server show my-web-server
+
+# スクリプティング向け JSON
+conoha server show my-web-server --format json
+```
+
+`--format json` / `--format yaml` の出力には、v0.8.0 以降 `security_groups` フィールドが含まれます ([crowdy/conoha-cli#191](https://github.com/crowdy/conoha-cli/pull/200))。サーバーに適用されている SG をスクリプトから取得したい場合に便利です。
+
+```json
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "name": "my-web-server",
+  "status": "ACTIVE",
+  "flavor": { "id": "g2l-t-c2m1d100" },
+  "image_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+  "key_name": "my-key",
+  "addresses": {
+    "ext-100-200-300-000-...": [
+      { "addr": "203.0.113.10", "version": 4, "OS-EXT-IPS:type": "fixed" }
+    ]
+  },
+  "security_groups": [
+    { "name": "default" },
+    { "name": "IPv4v6-SSH" },
+    { "name": "IPv4v6-Web" }
+  ],
+  "metadata": { "instance_name_tag": "my-web-server" }
+}
+```
+
+::: tip jq でフィルタ
+```bash
+conoha server show my-web-server --format json \
+  | jq -r '.security_groups[].name'
+```
+:::
+
 ---
 
 ## server create
@@ -81,10 +122,10 @@ conoha server create [flags]
 |-----------|------|------|
 | `--name` | サーバー名 | ○ |
 | `--flavor` | フレーバー ID または名前（例: `g2l-t-c2m1d100`、省略時はインタラクティブ選択） | |
-| `--image` | イメージ名または ID（省略時はインタラクティブ選択） | |
+| `--image` | イメージ名 / 部分文字列 / ID のいずれか（例: `ubuntu-24.04`、`docker-29` で `vmi-docker-29-ubuntu-24.04-amd64` に解決。省略時はインタラクティブ選択。曖昧一致した場合は候補一覧を表示してエラー終了） | |
 | `--key-name` | SSHキーペア名（省略時はインタラクティブ選択） | |
 | `--volume` | ブートディスクとして使用する既存ボリュームID | |
-| `--security-group` | セキュリティグループ名（複数指定可、省略時はインタラクティブ選択） | |
+| `--security-group` | セキュリティグループ名（複数指定可、省略時はインタラクティブ選択）。指定名は事前検証され、tenant 内に存在しない場合は VM 作成前にエラー終了 | |
 | `--for` | プリセット名 — `flavor` / `image` / `security-group` を一括指定（[後述](#プリセット-for)） | |
 | `--admin-pass` | 管理者パスワード | |
 | `--user-data` | 起動スクリプトファイルパス | |
@@ -105,6 +146,21 @@ TTYが利用できない環境（CI/CD、スクリプト、自動化ツール）
 
 ::: tip 起動スクリプト
 `--user-data`、`--user-data-raw`、`--user-data-url` は同時に1つのみ指定できます。最大16KiBまでです。
+:::
+
+::: warning `g2d-*` フレーバーは指定不可
+v0.8.0 以降、`--flavor` に `g2d-*`（ConoHa for DB 専用、built-in-disk フレーバー）を指定すると CLI が即座にエラー終了します ([crowdy/conoha-cli#196](https://github.com/crowdy/conoha-cli/pull/199))。`flavor list` には表示されますが一般 VPS API では作成できないためです。
+
+```
+$ conoha server create --flavor g2d-t-c2m4d60 --name foo
+Error: flavor "g2d-t-c2m4d60" is not supported by this CLI (built-in-disk family).
+Use a volume-backed flavor instead: g2l-* (Linux) or g2w-* (Windows).
+List available flavors with: conoha flavor list
+```
+
+- 通常 VPS は `g2l-*`（Linux）または `g2w-*`（Windows）
+- DB 用途は [ConoHa for DB](https://www.conoha.jp/db/) 専用ダッシュボードを利用
+- GPU ワークロードは `g2g-*` フレーバー + [`gpu setup`](/guide/gpu-setup)
 :::
 
 ### プリセット (`--for`) {#プリセット-for}

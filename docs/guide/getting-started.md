@@ -4,10 +4,14 @@ ConoHa CLIは、ConoHa VPS3をターミナルから操作するためのコマ�
 
 ## インストール
 
+::: tip コマンド名 = `conoha`
+v0.8.0 以降、インストール後の実行ファイル名は **`conoha`** です（プロダクト名「ConoHa CLI」と区別）。Homebrew の formula 名は引き続き `conoha-cli` ですが、コマンド呼び出しは `conoha ...` で行います。
+:::
+
 ### macOS (Homebrew)
 
 ```bash
-brew install crowdy/tap/conoha-cli
+brew install crowdy/tap/conoha-cli   # formula 名は conoha-cli、実行ファイルは conoha
 ```
 
 ### Scoop (Windows)
