@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="ConoHa CLI">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <style>
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: 800; font-size: 124px; fill: #f8fafc; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: 400; font-size: 32px; fill: #94a3b8; }
+      .pill { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: 500; font-size: 22px; fill: #cbd5e1; }
+      .url { font-family: "Fira Code", ui-monospace, monospace; font-weight: 600; font-size: 24px; fill: #38bdf8; }
+      .prompt { fill: #38bdf8; font-family: "Fira Code", ui-monospace, monospace; font-weight: 700; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Decorative terminal lines (right) -->
+  <g opacity="0.08" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round">
+    <path d="M 880 130 L 1100 130 M 880 170 L 1050 170 M 880 210 L 1130 210"/>
+    <path d="M 880 420 L 1080 420 M 880 460 L 1140 460 M 880 500 L 1030 500"/>
+  </g>
+
+  <!-- macOS-style traffic lights -->
+  <circle cx="60" cy="60" r="10" fill="#ef4444"/>
+  <circle cx="92" cy="60" r="10" fill="#eab308"/>
+  <circle cx="124" cy="60" r="10" fill="#22c55e"/>
+
+  <!-- Title -->
+  <g transform="translate(600, 290)" text-anchor="middle">
+    <text class="title">
+      <tspan class="prompt">&gt;_ </tspan>conoha-cli
+    </text>
+    <text y="60" class="subtitle">
+      Deploy any app on ConoHa VPS in one command
+    </text>
+  </g>
+
+  <!-- Feature pills -->
+  <g transform="translate(600, 440)" text-anchor="middle">
+    <g transform="translate(-260, 0)">
+      <rect x="-100" y="0" width="200" height="44" rx="22" fill="#1e293b" stroke="url(#accent)" stroke-opacity="0.5" stroke-width="2"/>
+      <text y="29" class="pill">GPU / LLM ready</text>
+    </g>
+    <g transform="translate(0, 0)">
+      <rect x="-100" y="0" width="200" height="44" rx="22" fill="#1e293b" stroke="url(#accent)" stroke-opacity="0.5" stroke-width="2"/>
+      <text y="29" class="pill">Auto HTTPS</text>
+    </g>
+    <g transform="translate(260, 0)">
+      <rect x="-100" y="0" width="200" height="44" rx="22" fill="#1e293b" stroke="url(#accent)" stroke-opacity="0.5" stroke-width="2"/>
+      <text y="29" class="pill">50+ samples</text>
+    </g>
+  </g>
+
+  <!-- URL -->
+  <text x="600" y="560" text-anchor="middle" class="url">conoha-cli.crowdy.dev</text>
+</svg>
