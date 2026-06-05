@@ -24,7 +24,7 @@ HTTPS 終端は conoha-proxy が担当します。`web.port: 7860` で Gradio UI
 - conoha-proxy がブート済み（[conoha-proxy セットアップ](/guide/proxy-setup)）
 - サーバーに **NVIDIA Container Toolkit と driver が入っている** こと（cloud-init で自動セットアップする例を後述）
 - **SSH アクセス**が可能なこと（REST API をコンテナ内から呼び出すために必要）
-- Go ≥ 1.23（CLI クライアントをローカルでビルドする場合のみ。VPS 上でビルドする場合は VPS 側に Go をインストールしてください）
+- Go ≥ 1.26（CLI クライアントをローカルでビルドする場合のみ。`cli/go.mod` の `go 1.26.1` に合わせてください。VPS 上でビルドする場合は VPS 側に Go をインストールしてください）
 
 ## スタック
 
@@ -93,7 +93,7 @@ web:
   service: fish-speech
   # WebUI (Gradio) port. The container also listens on 8080 for the REST
   # API used by the bundled Go CLI client, but proxy can only front one
-  # HTTP port — see README for SSH-tunnel access to the API.
+  # HTTP port — access the REST API via `docker exec` (see ハマりどころ).
   port: 7860
 ```
 
