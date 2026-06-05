@@ -53,11 +53,16 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
           ],
         },
         {
-          text: 'AI / LLM',
+          text: 'AI / GPU',
           items: [
             { text: 'FastAPI + AIチャットボット', link: '/examples/fastapi-ai-chatbot' },
-            { text: 'Ollama + Open WebUI', link: '/examples/ollama-webui' },
+            { text: 'Ollama + Open WebUI (CPU)', link: '/examples/ollama-webui' },
+            { text: 'Ollama + Open WebUI (L4 GPU)', link: '/examples/ollama-webui-gpu' },
             { text: 'vLLM (OpenAI 互換, L4 GPU)', link: '/examples/vllm-gpu' },
+            { text: 'Hunyuan3D-2 (画像→3D, L4 GPU)', link: '/examples/hunyuan3d-gpu' },
+            { text: 'Fish Speech TTS (L4 GPU)', link: '/examples/fish-speech-tts-gpu' },
+            { text: '音声エージェント (WebRTC + L4 GPU)', link: '/examples/voice-agent-conoha-l4' },
+            { text: 'Dify (AI ワークフロー)', link: '/examples/dify-https' },
           ],
         },
         {
