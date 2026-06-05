@@ -34,7 +34,7 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 | サンプル | できること |
 |---|---|
 | [ollama-webui-gpu](/examples/ollama-webui-gpu) | Gemma 4 など大規模 LLM をブラウザでチャット (Open WebUI) |
-| [vllm-gpu](https://github.com/crowdy/conoha-cli-app-samples/tree/main/vllm-gpu) | Qwen2.5-7B AWQ で **OpenAI 互換 API**、SSE ストリーミング対応 |
+| [vllm-gpu](/examples/vllm-gpu) | Qwen2.5-7B AWQ で **OpenAI 互換 API**、SSE ストリーミング対応 |
 | [hunyuan3d-gpu](/examples/hunyuan3d-gpu) | 画像から 3D モデル (GLB) を生成 (Tencent Hunyuan3D-2) |
 | [fish-speech-tts-gpu](/examples/fish-speech-tts-gpu) | 音声クローニング付き TTS + Go CLI クライアント |
 | [dify-https](/examples/dify-https) | AI ワークフロープラットフォーム (Dify) |
