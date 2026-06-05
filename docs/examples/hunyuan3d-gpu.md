@@ -136,7 +136,7 @@ cd conoha-cli-app-samples/hunyuan3d-gpu
 conoha app deploy <サーバー名> --app-name hunyuan3d-gpu --no-proxy
 ```
 
-::: tip `--no-proxy` が必須
+::: tip `--no-proxy` は必須
 本サンプルは `conoha.yml` を持たないため、`--no-proxy` を付けないと
 
 ```
