@@ -127,6 +127,7 @@ curl -N https://opencascade-fem.example.com/jobs/<JOB_ID>/events
 # data: {"stage": "mesh", "t_ms": 1234, ...}
 # data: {"stage": "assemble", ...}
 # data: {"stage": "solve", ...}
+# data: {"stage": "postproc", ...}
 # data: {"stage": "done", ...}
 ```
 
@@ -188,18 +189,39 @@ CPU コア数に応じて `OCFEM_MAX_CONCURRENT` を増やす場合、メモリ�
 
 ## no-proxy で動かす
 
-HTTPS が不要 (社内・開発用) で proxy を立てたくない場合は `--no-proxy` を明示します。
+HTTPS が不要 (社内・開発用) で proxy を立てたくない場合は、`compose.yml` のポート公開設定を `expose:` から `ports:` に切り替えてホストに直接バインドします。
 
-```bash
-conoha app deploy <サーバー名> --no-proxy
+```yaml
+# compose.yml はホストへ直接バインドする形に変える
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      OCFEM_MAX_CONCURRENT: "2"
+      OCFEM_MAX_ELEMENTS: "200000"
+      OCFEM_SOLVER_TIMEOUT_SECONDS: "60"
+      OCFEM_JOB_TTL_SECONDS: "1800"
+    volumes:
+      - jobs:/app/jobs
+volumes:
+  jobs: {}
 ```
 
-このサンプルは `conoha.yml` を同梱しているため、no-proxy 指定は明示的に必要です。proxy / no-proxy の使い分けは [アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照してください。
+その上で `--no-proxy` を明示してデプロイします。
+
+```bash
+conoha app init <サーバー名> --app-name opencascade-fem --no-proxy
+conoha app deploy <サーバー名> --app-name opencascade-fem --no-proxy
+```
+
+`http://<サーバーIP>:8000` でアクセスできます。HTTPS は別途自前で構成してください。詳細は [アプリデプロイ — モードの比較](/guide/app-deploy#モードの比較) を参照。
 
 ## 関連リンク
 
 - レシピ本体: [crowdy/conoha-cli-app-samples の opencascade-fem](https://github.com/crowdy/conoha-cli-app-samples/tree/main/opencascade-fem)
-- 検証記: [Qiita — ConoHa VPS3 + conoha-cli で OpenCascade + scikit-fem の CAE Web アプリを 1 台にデプロイ](https://qiita.com/crowdy)
+- 検証記: Qiita — *公開後にリンク追加*
 - pythonocc-core: [tpaviot/pythonocc-core](https://github.com/tpaviot/pythonocc-core)
 - gmsh: [gmsh.info](https://gmsh.info/)
 - scikit-fem: [scikit-fem ドキュメント](https://scikit-fem.readthedocs.io/)
