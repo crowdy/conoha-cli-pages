@@ -262,10 +262,7 @@ conoha server create \
   --flavor 1ff846c5-... \    # g2l-t-c4m16g1-l4 (4 vCPU / 16GB RAM / L4 GPU)
   --image  722c231f-... \    # vmi-docker-29.2-ubuntu-24.04-amd64
   --key-name <YOUR_KEY> \
-  --security-group default \
-  --security-group IPv4v6-SSH \
-  --security-group IPv4v6-Web \
-  --security-group IPv4v6-ICMP \
+  --security-group <YOUR_SG> \
   --user-data /tmp/nvidia-cloudinit.sh \
   --no-input --wait
 ```
