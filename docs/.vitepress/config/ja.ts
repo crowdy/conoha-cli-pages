@@ -74,6 +74,7 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
           items: [
             { text: 'nginx リバースプロキシ', link: '/examples/nginx-reverse-proxy' },
             { text: 'Ory Hydra + FastAPI (OAuth2)', link: '/examples/hydra-python-api' },
+            { text: 'OpenCascade FEM (CAD→CAE→3D)', link: '/examples/opencascade-fem' },
           ],
         },
       ],
