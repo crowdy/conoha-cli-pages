@@ -319,3 +319,4 @@ conoha app logs <サーバー名>
 - 関連サンプル:
   - [vLLM (OpenAI 互換, L4 GPU)](/examples/vllm-gpu) — 同じ L4 GPU + cloud-init パターン
   - [Hunyuan3D-2 (画像→3D, L4 GPU)](/examples/hunyuan3d-gpu) — Gradio + L4 GPU の兄弟サンプル
+  - [音声エージェント (WebRTC + L4 GPU)](/examples/voice-agent-conoha-l4) — 音声合成の応用（リアルタイム会話エージェント）
