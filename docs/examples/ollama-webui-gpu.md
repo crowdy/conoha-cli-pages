@@ -103,6 +103,8 @@ accessories:
 
 ## 3. NVIDIA セットアップ (cloud-init)
 
+このスクリプトは [vLLM (OpenAI 互換, L4 GPU)](/examples/vllm-gpu) と同じ内容です — L4 GPU 対応の ConoHa VPS であれば共通して利用できます。
+
 ConoHa の `vmi-docker-29.2-ubuntu-24.04-amd64` イメージは Docker は入っていますが、NVIDIA driver と Container Toolkit は入っていません。サーバー作成時の `--user-data` で以下のスクリプトを渡しておくと、初回ブート時にまとめて準備できます。
 
 ```bash
@@ -134,7 +136,18 @@ shutdown -r +1
 `ubuntu-drivers install --gpgpu` が入れる `nvidia-headless-no-dkms-XXX-server-open` には `nvidia-smi` が含まれません。確認用には別途 `apt-get install -y nvidia-utils-XXX-server` を入れてください（`XXX` は driver シリーズ番号）。
 :::
 
-サーバー作成時に `--user-data /tmp/nvidia-cloudinit.sh` を渡して cloud-init を適用してください（[サーバー管理](/guide/server) 参照）。
+フレーバー / イメージの UUID は `conoha flavor list` / `conoha image list` で取得してください。
+
+```bash
+conoha server create \
+  --name ollama-webui-gpu-test \
+  --flavor 1ff846c5-... \    # g2l-t-c20m128g1-l4 (20 vCPU / 128GB / L4 GPU)
+  --image  722c231f-... \    # vmi-docker-29.2-ubuntu-24.04-amd64
+  --key-name <YOUR_KEY> \
+  --security-group <YOUR_SG> \
+  --user-data /tmp/nvidia-cloudinit.sh \
+  --no-input --wait
+```
 
 ## 4. デプロイ
 
@@ -173,7 +186,7 @@ conoha app deploy <サーバー名>
 コンテナ内から直接 `ollama pull` できます。
 
 ```bash
-docker compose exec ollama ollama pull gemma3:7b
+docker compose exec ollama ollama pull gemma4:e4b
 ```
 
 pull 完了後、Open WebUI のドロップダウンに即座に表示されます。
@@ -214,7 +227,7 @@ L4 (24GB VRAM) で動作するモデルの目安:
 
 ### モデルのダウンロードに時間がかかる
 
-Gemma 4 31B は約 20GB あり、初回 pull に 20–40 分かかります。この間 `ollama` の healthcheck が失敗し続けると `webui` の起動も待機されます。`compose.yml` の `start_period: 600s`（デフォルト）は最低限の猶予です — 大きなモデルに変更した場合はさらに延ばす必要があります（例: `start_period: 2400s`）。
+Gemma 4 31B は約 20GB あり、初回 pull に 20–40 分かかります。この間 `ollama` の healthcheck が失敗し続けると `webui` の起動も待機されます。`compose.yml` の `start_period: 600s`（サンプルで設定済み）は最低限の猶予です — 大きなモデルに変更した場合はさらに延ばす必要があります（例: `start_period: 2400s`）。
 
 ### Open WebUI の初回オンボーディング
 
@@ -225,9 +238,13 @@ Gemma 4 31B は約 20GB あり、初回 pull に 20–40 分かかります。�
 1 台の L4 (24GB) では同時に複数の大型モデルを GPU にロードできません。Ollama は `OLLAMA_KEEP_ALIVE` 環境変数でモデルを GPU に保持する時間を制御します（デフォルト: `5m`）。複数モデルを切り替えながら使う場合は値を調整してください。
 
 ```yaml
-environment:
-  - OLLAMA_KEEP_ALIVE=30m   # 30 分間 GPU に保持
+services:
+  ollama:
+    environment:
+      - OLLAMA_KEEP_ALIVE=30m   # 30 分間 GPU に保持
 ```
+
+この環境変数は `ollama` サービスに追加します。`ollama` は accessory のため `conoha app deploy` では反映されません — 変更後は `docker compose up -d ollama` を手動で実行してください。
 
 ## 関連リンク
 
