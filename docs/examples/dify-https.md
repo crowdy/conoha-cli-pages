@@ -239,19 +239,19 @@ cd conoha-cli-app-samples/dify-https
 $EDITOR conoha.yml
 
 # DNS A レコードを 3 つ設定し伝播を確認（全て同じ VPS IP）
-dig +short dify-https.yourdomain.com
-dig +short api.dify-https.yourdomain.com
-dig +short web.dify-https.yourdomain.com
+dig +short dify-https.example.com
+dig +short api.dify-https.example.com
+dig +short web.dify-https.example.com
 
 conoha proxy boot --acme-email you@example.com myserver  # サーバーごとに 1 回
 conoha app init myserver
 conoha app env set myserver SECRET_KEY=$(openssl rand -hex 32) \
   DB_PASSWORD=$(openssl rand -base64 32) \
   REDIS_PASSWORD=$(openssl rand -base64 32) \
-  CONSOLE_API_URL=https://api.dify-https.yourdomain.com \
-  APP_API_URL=https://api.dify-https.yourdomain.com \
-  SERVICE_API_URL=https://api.dify-https.yourdomain.com \
-  APP_WEB_URL=https://web.dify-https.yourdomain.com
+  CONSOLE_API_URL=https://api.dify-https.example.com \
+  APP_API_URL=https://api.dify-https.example.com \
+  SERVICE_API_URL=https://api.dify-https.example.com \
+  APP_WEB_URL=https://web.dify-https.example.com
 conoha app deploy myserver   # 初回は DB マイグレーションで 5–10 分
 ```
 
