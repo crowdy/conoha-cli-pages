@@ -172,7 +172,7 @@ accessories:
   - redis
 ```
 
-**root FQDN と `/_health` プローブ、`unhealthy_threshold: 24`：** Outline には conoha-proxy のデフォルトプローブパス `/up` が存在しません。代わりにサーバーが起動・到達可能になった時点で 200 を返す `/_health` エンドポイントを使います。初回デプロイ時は Outline が PostgreSQL のスキーママイグレーションを実行するため、コンテナ起動から HTTP 応答までに最大 30 秒かかります。デフォルトの `unhealthy_threshold: 15`（75 秒）でも通常は間に合いますが、VPS のスペックや pull 状況によっては足りないことがあります。`unhealthy_threshold: 24`（24 × 5 秒 = 120 秒）に設定することで、マイグレーション完了を安全に待機できます。この値を下げると初回デプロイが unhealthy 判定で失敗します。
+**root FQDN と `/_health` プローブ、`unhealthy_threshold: 24`：** Outline には conoha-proxy のデフォルトプローブパス `/up` が存在しません。代わりにサーバーが起動・到達可能になった時点で 200 を返す `/_health` エンドポイントを使います。初回デプロイ時は Outline が PostgreSQL のスキーママイグレーションを実行するため、コンテナ起動から HTTP 応答までに最大 30 秒かかります。conoha-proxy のデフォルト `unhealthy_threshold: 3`（3 × 5 秒 = 15 秒）では DB マイグレーション完了を待ちきれず unhealthy 判定で初回デプロイが失敗します。`unhealthy_threshold: 24`（24 × 5 秒 = 120 秒）に設定することで、マイグレーションを安全に待機できます。
 
 **`expose:` ブロックで Dex サブドメインを独立公開：** Outline のブラウザログインフローは OIDC Authorization Code Flow を使い、ブラウザが直接 Dex の `/.well-known/openid-configuration` を取得（discovery）してから `https://dex.outline.example.com/dex/auth` にリダイレクトします。このブラウザからのリクエストを HTTPS で完結させるため、Dex は独立した FQDN を持つ必要があります。OIDC の `iss` URL（`https://dex.outline.example.com/dex`）はトークンに bake-in されるため、一度デプロイした後にこのサブドメインを変えると既存トークンが無効になります（[ハマりどころ](#ハマりどころ) 参照）。Outline サービス自体のサーバー間通信（`OIDC_TOKEN_URI`、`OIDC_USERINFO_URI`）は compose 内部ネットワークの `dex:5556` を直接使うため外部 FQDN を経由しません。
 
