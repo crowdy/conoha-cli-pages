@@ -50,7 +50,7 @@ Supabase は Postgres 読み書き・認証・REST API 処理のみで動作し�
 | 認証 | `auth` | supabase/gotrue v2.170 | accessory のみ |
 | REST API | `rest` | postgrest/postgrest v12.2 | accessory のみ |
 | メタデータ API | `meta` | supabase/postgres-meta v0.88 | accessory のみ |
-| データベース | `db` | supabase/postgres 15.8 | accessory のみ |
+| データベース | `db` | supabase/postgres 15.8.1.060 | accessory のみ |
 
 ## 前提条件
 
@@ -99,7 +99,7 @@ services:
   # Full definitions: supabase-selfhost/compose.yml
 
   db:
-    image: supabase/postgres:15   # pinned in full compose.yml
+    image: supabase/postgres:15.8.1.060
     expose:
       - "5432"           # Internal only — never add ports: here
     environment:
@@ -152,7 +152,7 @@ health:
 # parallel slots either, so blue_green:false matches spec §4.5.1.
 expose:
   - label: admin
-    host: admin.example.com
+    host: admin.supabase-selfhost.example.com
     service: studio
     port: 3000
     blue_green: false
