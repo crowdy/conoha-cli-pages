@@ -47,9 +47,9 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 | サンプル | できること |
 |---|---|
 | [gitea](https://github.com/crowdy/conoha-cli-app-samples/tree/main/gitea) | OIDC 認証付きの自前 Git ホスティング |
-| [supabase-selfhost](https://github.com/crowdy/conoha-cli-app-samples/tree/main/supabase-selfhost) | Supabase をフルセット (Studio + Kong + GoTrue + PostgREST) |
-| [immich](https://github.com/crowdy/conoha-cli-app-samples/tree/main/immich) | Google フォト代替の写真バックアップ |
-| [outline](https://github.com/crowdy/conoha-cli-app-samples/tree/main/outline) | Notion 風チームナレッジベース (OIDC 認証付き) |
+| [supabase-selfhost](/examples/supabase-selfhost) | Supabase をフルセット (Studio + Kong + GoTrue + PostgREST) |
+| [immich](/examples/immich) | Google フォト代替の写真バックアップ |
+| [outline](/examples/outline) | Notion 風チームナレッジベース (OIDC 認証付き) |
 | [ghost-blog](https://github.com/crowdy/conoha-cli-app-samples/tree/main/ghost-blog) | Ghost + MySQL でブログ運営 |
 | [plausible-analytics](https://github.com/crowdy/conoha-cli-app-samples/tree/main/plausible-analytics) | プライバシー重視の Web アナリティクス |
 
