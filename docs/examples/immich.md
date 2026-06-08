@@ -132,23 +132,12 @@ accessories:
 
 ## 3. 環境変数 (`.env`)
 
+本サンプルが必須として読むのは `DB_PASSWORD` の 1 個だけです。
+
 ```bash
 # DB_PASSWORD: 必須。デフォルト値はパブリックリポジトリに公開されているため
 # 必ず変更してください。
 DB_PASSWORD=$(openssl rand -base64 32)
-
-# UPLOAD_LOCATION: 写真ライブラリの保存先。
-# デフォルト ./library はテスト用。本番では絶対パスで外部ディスクを指定する。
-# 例: ConoHa 追加ブロックストレージを /mnt/photos にマウントした場合
-UPLOAD_LOCATION=/mnt/photos/immich
-
-# IMMICH_VERSION: イメージタグ。`release` は moving tag のため
-# 再現性のある本番デプロイには特定バージョンを固定することを推奨。
-IMMICH_VERSION=v1.131.3
-
-# DB_DATA_LOCATION: Postgres データの保存先。
-# UPLOAD_LOCATION と同様、本番では外部ディスク or 専用パスを推奨。
-DB_DATA_LOCATION=/mnt/photos/immich-db
 ```
 
 `conoha app env set` で投入する場合:
@@ -158,7 +147,11 @@ conoha app env set myserver \
   DB_PASSWORD=$(openssl rand -base64 32)
 ```
 
-`UPLOAD_LOCATION` と `DB_DATA_LOCATION` は `compose.yml` のボリューム設定（`immich_uploads` / `immich_db`）と連動します。Docker 管理ボリュームを使う場合はデフォルトのまま（変数設定不要）で問題ありません。外部マウントポイントに切り替える場合は `compose.yml` のボリューム定義を `bind` マウントに変更してください。
+::: warning UPLOAD_LOCATION / DB_DATA_LOCATION は本サンプルでは未配線
+Immich 上流の `docker-compose.yml` テンプレートには `UPLOAD_LOCATION` と `DB_DATA_LOCATION` という環境変数があり、写真ライブラリ / DB データの保存先を bind マウントで切り替えられますが、本サンプルの `compose.yml` は単純化のため Docker 管理の名前付きボリューム（`immich_uploads` / `immich_db`）を使っています。外部ディスクや追加ブロックストレージを使いたい場合は、`compose.yml` の `volumes:` 定義を bind マウントに書き換える必要があります（[カスタマイズ](#カスタマイズ) 参照）。
+:::
+
+`IMMICH_VERSION` はサンプルの `compose.yml` で直接タグを指定しています（`ghcr.io/immich-app/immich-server:v1.131.3`）。本番運用では `release` のような moving タグを避け、特定バージョンに固定してください。
 
 ## 4. デプロイ
 
@@ -242,7 +235,7 @@ immich-machine-learning:
     - IMMICH_MACHINE_LEARNING_CLIP_MODEL=XLM-Roberta-Large-Vit-B-16Plus
 ```
 
-利用可能なモデル一覧と各モデルの精度・速度比較は [immich.app/docs/features/ml-clip](https://immich.app/docs/features/smart-search) を参照してください。`immich-machine-learning` は accessory のため、モデル変更後は `conoha app deploy` だけでは反映されません — サーバー上で `docker compose up -d immich-machine-learning` を手動実行してください。
+利用可能なモデル一覧と各モデルの精度・速度比較は [immich.app/docs/features/smart-search](https://immich.app/docs/features/smart-search) を参照してください。`immich-machine-learning` は accessory のため、モデル変更後は `conoha app deploy` だけでは反映されません — サーバー上で `docker compose up -d immich-machine-learning` を手動実行してください。
 
 ### L4 GPU による ML 高速化
 
