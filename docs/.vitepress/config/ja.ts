@@ -66,11 +66,14 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
           ],
         },
         {
-          text: 'セルフホスティング',
+          text: 'セルフホスティング SaaS',
           items: [
             { text: 'WordPress', link: '/examples/wordpress' },
             { text: 'Ghost ブログ', link: '/examples/ghost-blog' },
-            { text: 'Gitea', link: '/examples/gitea' },
+            { text: 'Gitea (OIDC)', link: '/examples/gitea' },
+            { text: 'Outline (OIDC チーム Wiki)', link: '/examples/outline' },
+            { text: 'Supabase Self-host', link: '/examples/supabase-selfhost' },
+            { text: 'Immich (写真管理)', link: '/examples/immich' },
             { text: 'MinIO + n8n', link: '/examples/minio-n8n' },
           ],
         },
