@@ -10,6 +10,7 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
       { text: 'ガイド', link: '/guide/getting-started' },
       { text: '実践例', link: '/examples/nextjs' },
       { text: 'リファレンス', link: '/reference/auth' },
+      { text: '構築サポート', link: '/support' },
     ],
 
     sidebar: {
