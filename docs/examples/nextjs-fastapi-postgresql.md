@@ -144,7 +144,7 @@ const nextConfig: NextConfig = {
 
 ## 4. 環境変数
 
-このサンプルには `.env.example` は同梱されていません。`compose.yml` に直接環境変数が書き込まれており、デプロイ時に `.env.server` で上書きできます。
+このサンプルには `.env.example` は同梱されていません。環境変数は `compose.yml` に直接書き込まれており、パスワードなどの機密値は本番運用前に `compose.yml` を直接編集して置き換えます。compose の `environment:` に直書きされた値は `.env.server`（env_file）より優先されるため、`.env.server` では上書きできない点に注意してください。
 
 | 変数 | 説明 |
 |---|---|

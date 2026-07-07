@@ -55,7 +55,7 @@ nginx は root FQDN のアプリ shell を後方互換のために維持しつ�
 
 ## 1. compose.yml
 
-完全版は [`rails-mercari/compose.yml`](https://github.com/crowdy/conoha-cli-app-samples/blob/main/rails-mercari/compose.yml)。6 サービス、host port は使わず `expose:` のみです。
+完全版は [`rails-mercari/compose.yml`](https://github.com/crowdy/conoha-cli-app-samples/blob/main/rails-mercari/compose.yml)。6 サービス、host port は使わず `expose:` のみです（`DB_PASSWORD` / `SECRET_KEY_BASE` / `DEX_DB_PASSWORD` はこのドキュメントでは `${VAR:?required}` としてマスクしています。実際の compose.yml は未設定時に弱いデフォルト値へフォールバックする形になっているため必ず自分の値を設定してください。この挙動と `conoha app env set` が効かない既知の問題については後述の [ハマりどころ](#ハマりどころ) を参照）。
 
 ```yaml
 services:
