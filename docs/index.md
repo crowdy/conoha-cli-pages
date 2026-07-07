@@ -14,6 +14,9 @@ hero:
     - theme: alt
       text: GitHub
       link: https://github.com/crowdy/conoha-cli
+    - theme: alt
+      text: HPC構築を相談（無料）
+      link: /support
 features:
   - title: かんたんインストール
     details: Go製のシングルバイナリ。ダウンロードしてすぐ使えます。
@@ -138,3 +141,11 @@ conoha app deploy my-server
 ::: tip 詳しくは
 [クイックスタート](/guide/quickstart) で実際の出力を見ながら試せます。
 :::
+
+## 構築サポート（無料）
+
+ConoHa で **HPC / GPU / k8s などの大規模インフラ** を組みたいけれど、どう始めればいいか分からない——そんなときは、**conoha-cli を作った本人** が無料でお手伝いします。
+
+conoha-cli の OSS 活動として、実戦で使ってもらいながら事例を増やすのが目的です。
+
+→ [構築サポートについて詳しく見る](/support)
