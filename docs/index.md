@@ -60,7 +60,7 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 
 | サンプル | できること |
 |---|---|
-| [coolify](https://github.com/crowdy/conoha-cli-app-samples/tree/main/coolify) / [dokploy](https://github.com/crowdy/conoha-cli-app-samples/tree/main/dokploy) | セルフホスティング PaaS (Heroku/Vercel 代替) |
+| [coolify](/examples/coolify) / [dokploy](/examples/dokploy) | セルフホスティング PaaS (Heroku/Vercel 代替) |
 | [github-actions-runner](https://github.com/crowdy/conoha-cli-app-samples/tree/main/github-actions-runner) | セルフホスト Actions Runner (GPU 利用も可) |
 | [github-pr-doc-reviewer](https://github.com/crowdy/conoha-cli-app-samples/tree/main/github-pr-doc-reviewer) | PR の spec / ADR / glossary 整合性を Claude が自動レビュー |
 | [prometheus-grafana](https://github.com/crowdy/conoha-cli-app-samples/tree/main/prometheus-grafana) | メトリクス監視・可視化スタック |

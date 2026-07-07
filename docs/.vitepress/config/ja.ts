@@ -79,6 +79,13 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
           ],
         },
         {
+          text: '開発インフラ・運用',
+          items: [
+            { text: 'Coolify (PaaS)', link: '/examples/coolify' },
+            { text: 'Dokploy (PaaS, Swarm)', link: '/examples/dokploy' },
+          ],
+        },
+        {
           text: 'アーキテクチャパターン',
           items: [
             { text: 'nginx リバースプロキシ', link: '/examples/nginx-reverse-proxy' },
