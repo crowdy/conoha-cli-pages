@@ -53,6 +53,14 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
           ],
         },
         {
+          text: 'フルスタックウェブ',
+          items: [
+            { text: 'Next.js + FastAPI + PostgreSQL', link: '/examples/nextjs-fastapi-postgresql' },
+            { text: 'Next.js + FastAPI + Clerk + Stripe (SaaS)', link: '/examples/nextjs-fastapi-clerk-stripe' },
+            { text: 'Rails メルカリ風 (OIDC + Sidekiq)', link: '/examples/rails-mercari' },
+          ],
+        },
+        {
           text: 'AI / GPU',
           items: [
             { text: 'FastAPI + AIチャットボット', link: '/examples/fastapi-ai-chatbot' },
