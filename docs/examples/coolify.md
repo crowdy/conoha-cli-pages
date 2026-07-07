@@ -75,7 +75,7 @@ accessories:
 
 ## 2. compose.yml (抜粋)
 
-完全版は [`coolify/compose.yml`](https://github.com/crowdy/conoha-cli-app-samples/blob/main/coolify/compose.yml)。重要部分を抜粋します。
+完全版は [`coolify/compose.yml`](https://github.com/crowdy/conoha-cli-app-samples/blob/main/coolify/compose.yml)。重要部分を抜粋します（`DB_PASSWORD` / `REDIS_PASSWORD` はこのドキュメントでは `${VAR:?required}` としてマスクしています。実際の compose.yml では未設定時に弱いデフォルトパスワードへフォールバックする形になっているため、本番運用前に必ず自分の値で上書きしてください — 詳しくは [3. 環境変数](#_3-環境変数) を参照）。
 
 ```yaml
 services:
