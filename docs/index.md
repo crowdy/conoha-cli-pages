@@ -71,8 +71,9 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 
 | サンプル | できること |
 |---|---|
-| [nextjs-fastapi-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/nextjs-fastapi-postgresql) | Next.js + FastAPI + PostgreSQL の CRUD ひな型 |
-| [rails-mercari](https://github.com/crowdy/conoha-cli-app-samples/tree/main/rails-mercari) | Rails で作るメルカリ風マーケットプレイス (OIDC 認証 + Sidekiq) |
+| [nextjs-fastapi-postgresql](/examples/nextjs-fastapi-postgresql) | Next.js + FastAPI + PostgreSQL の CRUD ひな型 |
+| [nextjs-fastapi-clerk-stripe](/examples/nextjs-fastapi-clerk-stripe) | Clerk 認証 + Stripe サブスクの SaaS デモ (マルチサブドメイン) |
+| [rails-mercari](/examples/rails-mercari) | Rails で作るメルカリ風マーケットプレイス (OIDC 認証 + Sidekiq) |
 | [django-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/django-postgresql) | Django ORM + 管理画面 |
 | [spring-boot-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/spring-boot-postgresql) | Spring Boot + JPA CRUD |
 | [bun-elysia-chat](https://github.com/crowdy/conoha-cli-app-samples/tree/main/bun-elysia-chat) | Bun + Elysia の WebSocket リアルタイムチャット |
