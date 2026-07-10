@@ -1,20 +1,22 @@
 # Reflecting conoha-cli-app-samples into /examples/
 
-**Date:** 2026-06-05
+**Date:** 2026-06-05 (rev-2: 2026-07-10)
 **Topic:** Bring the 35 samples in `conoha-cli-app-samples` that lack a dedicated `/examples/` page on `conoha-cli-pages` into the site, restructure the sidebar to mirror `index.md`, and rewire home-page links.
-**Status:** Design awaiting approval.
+**Status:** Design approved; Phases 1–3 delivered. Rev-2 folds in two samples added upstream after the original spec.
+
+> **Revision 2 (2026-07-10):** `vcluster` and `kubevirt-provisioner` were added to `conoha-cli-app-samples` after this spec was written (they appear in neither the original IA nor `index.md`). Rev-2 adds a new **Kubernetes / 仮想化** sidebar category (IA #8 below) and lists both as **flagship** pages (page-tier table). Total flagship count 14 → 16; total samples 56 → 58. Human-approved 2026-07-10 (category + flagship tier).
 
 ## Context
 
 `conoha-cli-app-samples` currently ships **56 deployable samples** ranging from one-file static sites to multi-service AI agents. `conoha-cli-pages/docs/examples/` carries pages for only **21** of them; the other 35 are reachable only via GitHub links scattered across `docs/index.md`. The newest sample, `opencascade-fem` (PR #108, 2026-05-23), prompted this work — it lives only as a row in the home-page table.
 
-The site's promise ("50+ samples, all `git clone` → `conoha app deploy`") is undercut when most samples lack an on-site page: readers landing from a search engine cannot read a story without leaving the site, and the sidebar's five categories (`Starter / Web / AI/LLM / Self-hosting / Architecture`) no longer reflect how `index.md` organises the catalog (eight categories: AI/GPU, Self-hosting SaaS, Dev Infra/Ops, Full-stack Web, Curiosities, plus the three above).
+The site's promise ("50+ samples, all `git clone` → `conoha app deploy`") is undercut when most samples lack an on-site page (rev-2: the catalog is now **58 samples**). Readers landing from a search engine cannot read a story without leaving the site, and the sidebar's five categories (`Starter / Web / AI/LLM / Self-hosting / Architecture`) no longer reflect how `index.md` organises the catalog (eight categories: AI/GPU, Self-hosting SaaS, Dev Infra/Ops, Full-stack Web, Curiosities, plus the three above).
 
 ## Goals
 
 1. **Coverage** — every sample in `app-samples` has a corresponding `/examples/<sample>.md` page.
-2. **Tiered depth** — 14 *flagship* pages (GPU/AI + showcase self-hosted/PaaS/full-stack) match the depth of `vllm-gpu.md` (~200–400 lines). The remaining 21 use a compact template (~60–100 lines) that points readers back to the upstream README for compose details.
-3. **Sidebar parity with `index.md`** — eight categories, same order, same naming.
+2. **Tiered depth** — 16 *flagship* pages (GPU/AI + showcase self-hosted/PaaS/full-stack + Kubernetes/仮想化; 14 original + 2 in rev-2) match the depth of `vllm-gpu.md` (~200–400 lines). The remaining 21 use a compact template (~60–100 lines) that points readers back to the upstream README for compose details.
+3. **Sidebar parity with `index.md`** — nine categories (rev-2 adds Kubernetes / 仮想化), same order, same naming. The cleanup PR (Phase 4) adds a matching `index.md` section so home-page and sidebar stay in parity.
 4. **Link rewiring** — every GitHub `tree/main/<sample>` link in `index.md` that now has an on-site page becomes an internal `/examples/<sample>` link. The closing "→ list all 50+ samples" link to GitHub stays as the authoritative catalog.
 5. **Authoring rules captured** — `CONTRIBUTING.md` gains a short checklist for adding a new example page so future samples don't drift.
 6. **Build clean** — `npx vitepress build docs` passes with no dead-link or sidebar warnings on every PR.
@@ -41,13 +43,14 @@ Sidebar config lives in `docs/.vitepress/config/ja.ts` under `/examples/`. New s
 5. **セルフホスティング SaaS** (10) — existing 4 + `outline`, `supabase-selfhost`, `immich`, `strapi-postgresql`, `meilisearch`, `plausible-analytics`
 6. **開発インフラ・運用** *(new)* (12) — `coolify`, `dokploy`, `github-actions-runner`, `github-pr-doc-reviewer`, `prometheus-grafana`, `quickwit-otel`, `uptime-kuma`, `chatops-deploy`, `multi-env-deploy`, `gitops-pipeline`, `hermes-agent`, `personal-dashboard`
 7. **アーキテクチャパターン** (3) — existing 2 + `opencascade-fem`
-8. **ちょっと変わったもの** *(new)* (4) — `dns-server`, `line-api-mock`, `line-cli-go`, `slurm-rest-api`
+8. **Kubernetes / 仮想化** *(new — rev-2)* (2) — `kubevirt-provisioner`, `vcluster`
+9. **ちょっと変わったもの** *(new)* (4) — `dns-server`, `line-api-mock`, `line-cli-go`, `slurm-rest-api`
 
 Existing pages (`wordpress.md` etc.) keep their filenames; ordering inside the new categories follows `index.md`. `nav.実践例` continues to point at `/examples/nextjs` — no change.
 
 ### Page tiers
 
-#### Flagship (14 — full vllm-gpu treatment, 200–400 lines)
+#### Flagship (16 — full vllm-gpu treatment, 200–400 lines)
 
 | Sample | Category | Why flagship |
 |---|---|---|
@@ -65,6 +68,8 @@ Existing pages (`wordpress.md` etc.) keep their filenames; ordering inside the n
 | `nextjs-fastapi-postgresql` | Full-stack | Canonical full-stack template |
 | `nextjs-fastapi-clerk-stripe` | Full-stack | Clerk + Stripe SaaS web shape |
 | `rails-mercari` | Full-stack | OIDC + Sidekiq + Redis "production-ish" Rails |
+| `kubevirt-provisioner` | Kubernetes / 仮想化 | k3s + KubeVirt + FastAPI; browser VM management over hardware `/dev/kvm`, xterm console; proxy mode, `blue_green:false` (rev-2) |
+| `vcluster` | Kubernetes / 仮想化 | k3s + vCluster multi-tenant virtual k8s; non-deploy (script-driven, no `conoha.yml`, like dokploy) (rev-2) |
 
 #### Compact (21 — short template, 60–100 lines)
 
@@ -78,6 +83,8 @@ Existing pages (`wordpress.md` etc.) keep their filenames; ordering inside the n
 Compact pages can be promoted to flagship later by adding sections; the template is a strict subset.
 
 ## Page Templates
+
+> **Non-deploy flagships (rev-2):** a few flagship samples are not `conoha app deploy` targets — they have no `conoha.yml`/`compose.yml` and are driven by `conoha server create` + `conoha server ssh` + scripts (`dokploy`, and in rev-2 `vcluster`). For these, adapt the flagship template honestly: replace the `compose.yml (抜粋)` / `デプロイ` sections with the sample's actual script/manifest flow, and state the non-deploy mode up front (as `dokploy.md` does). Do not invent a `conoha.yml`/proxy flow.
 
 ### Flagship template
 
@@ -186,7 +193,7 @@ Rules:
 - If `/examples/<sample>` exists, link internally.
 - If not, leave the GitHub link.
 - Keep the closing "→ 全 50+ サンプルを一覧する" GitHub link as the authoritative full catalog.
-- Update the "50+" count to "55+" once the cleanup PR lands.
+- Update the "50+" count to the real total (**58** as of rev-2) once the cleanup PR lands.
 
 ## CONTRIBUTING.md Addition
 
@@ -216,7 +223,8 @@ Split into 7–8 PRs to keep review tractable. Phase 1 blocks every later phase;
 | 2d | Full-stack flagships | `nextjs-fastapi-postgresql`, `nextjs-fastapi-clerk-stripe`, `rails-mercari` + slots + rewires. |
 | 3a | Compact: Web/Full-stack + Curiosities | `bun-elysia-chat`, `hono-drizzle-postgresql`, `nextjs-go-google_ucp`, `sendgrid-invitation`, `dns-server`, `line-api-mock`, `line-cli-go`, `slurm-rest-api` + slots + rewires. |
 | 3b | Compact: SaaS + Dev Infra | `meilisearch`, `plausible-analytics`, `strapi-postgresql`, `github-actions-runner`, `github-pr-doc-reviewer`, `prometheus-grafana`, `quickwit-otel`, `uptime-kuma`, `chatops-deploy`, `multi-env-deploy`, `gitops-pipeline`, `hermes-agent`, `personal-dashboard` + slots + rewires. |
-| 4 | Cleanup | Count bump (`50+` → `55+`), add `opencascade-fem` row (and any other samples missing from `index.md` tables) to the appropriate category table, final `grep` for residual `tree/main/<sample>` GitHub links, dead-link check via `vitepress build`. |
+| 2e *(rev-2)* | Kubernetes / 仮想化 flagships | `kubevirt-provisioner` (proxy-mode `conoha app deploy`), `vcluster` (non-deploy, script-driven — like dokploy); create the new sidebar category; `index.md` rows deferred to Phase 4. |
+| 4 | Cleanup | Count bump (`50+` → the real total, **58** after rev-2), add every sample still missing from `index.md` tables (incl. the new Kubernetes / 仮想化 home-page section) to the appropriate category table, final `grep` for residual `tree/main/<sample>` GitHub links, dead-link check via `vitepress build`. |
 
 ### Per-PR checklist
 
@@ -236,7 +244,7 @@ Split into 7–8 PRs to keep review tractable. Phase 1 blocks every later phase;
 
 ## Estimate
 
-Rough authoring effort: 14 flagship × ~1.5 h + 21 compact × ~0.4 h ≈ 30 hours of writing, plus build / review cycles. To be broken down into concrete tasks by the implementation plan.
+Rough authoring effort: 16 flagship × ~1.5 h + 21 compact × ~0.4 h ≈ 33 hours of writing, plus build / review cycles. To be broken down into concrete tasks by the implementation plan.
 
 ## Out-of-scope follow-ups
 

@@ -119,6 +119,13 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
           ],
         },
         {
+          text: 'Kubernetes / 仮想化',
+          items: [
+            { text: 'KubeVirt プロビジョナー (k3s + VM)', link: '/examples/kubevirt-provisioner' },
+            { text: 'vCluster (マルチテナント仮想 k8s)', link: '/examples/vcluster' },
+          ],
+        },
+        {
           text: 'ちょっと変わったもの',
           items: [
             { text: 'DNS サーバー (PowerDNS)', link: '/examples/dns-server' },
