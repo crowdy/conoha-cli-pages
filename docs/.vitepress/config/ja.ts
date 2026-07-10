@@ -51,6 +51,8 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
             { text: 'NestJS + PostgreSQL', link: '/examples/nestjs-postgresql' },
             { text: 'Go Fiber', link: '/examples/go-fiber' },
             { text: 'Rust Actix-web', link: '/examples/rust-actix-web' },
+            { text: 'Hono + Drizzle + PostgreSQL', link: '/examples/hono-drizzle-postgresql' },
+            { text: 'Bun + Elysia チャット', link: '/examples/bun-elysia-chat' },
           ],
         },
         {
@@ -59,6 +61,8 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
             { text: 'Next.js + FastAPI + PostgreSQL', link: '/examples/nextjs-fastapi-postgresql' },
             { text: 'Next.js + FastAPI + Clerk + Stripe (SaaS)', link: '/examples/nextjs-fastapi-clerk-stripe' },
             { text: 'Rails メルカリ風 (OIDC + Sidekiq)', link: '/examples/rails-mercari' },
+            { text: 'Next.js + Go (Google UCP)', link: '/examples/nextjs-go-google_ucp' },
+            { text: 'SendGrid 招待メール', link: '/examples/sendgrid-invitation' },
           ],
         },
         {
@@ -99,6 +103,15 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
             { text: 'nginx リバースプロキシ', link: '/examples/nginx-reverse-proxy' },
             { text: 'Ory Hydra + FastAPI (OAuth2)', link: '/examples/hydra-python-api' },
             { text: 'OpenCascade FEM (CAD→CAE→3D)', link: '/examples/opencascade-fem' },
+          ],
+        },
+        {
+          text: 'ちょっと変わったもの',
+          items: [
+            { text: 'DNS サーバー (PowerDNS)', link: '/examples/dns-server' },
+            { text: 'LINE API モック', link: '/examples/line-api-mock' },
+            { text: 'LINE CLI (Go)', link: '/examples/line-cli-go' },
+            { text: 'Slurm REST API', link: '/examples/slurm-rest-api' },
           ],
         },
       ],

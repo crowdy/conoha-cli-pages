@@ -76,17 +76,17 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 | [rails-mercari](/examples/rails-mercari) | Rails で作るメルカリ風マーケットプレイス (OIDC 認証 + Sidekiq) |
 | [django-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/django-postgresql) | Django ORM + 管理画面 |
 | [spring-boot-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/spring-boot-postgresql) | Spring Boot + JPA CRUD |
-| [bun-elysia-chat](https://github.com/crowdy/conoha-cli-app-samples/tree/main/bun-elysia-chat) | Bun + Elysia の WebSocket リアルタイムチャット |
-| [hono-drizzle-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/hono-drizzle-postgresql) | Hono + Drizzle REST API + Swagger UI |
+| [bun-elysia-chat](/examples/bun-elysia-chat) | Bun + Elysia の WebSocket リアルタイムチャット |
+| [hono-drizzle-postgresql](/examples/hono-drizzle-postgresql) | Hono + Drizzle REST API + Swagger UI |
 
 ### ちょっと変わったもの
 
 | サンプル | できること |
 |---|---|
-| [dns-server](https://github.com/crowdy/conoha-cli-app-samples/tree/main/dns-server) | PowerDNS + CRUD API で個人 DNS ホスティング |
-| [line-api-mock](https://github.com/crowdy/conoha-cli-app-samples/tree/main/line-api-mock) | LINE Messaging API のローカル開発用モック (Webhook エミュレーション) |
-| [slurm-rest-api](https://github.com/crowdy/conoha-cli-app-samples/tree/main/slurm-rest-api) | Slurm 単一ノードクラスター + REST API (JWT 認証) |
-| [nextjs-go-google_ucp](https://github.com/crowdy/conoha-cli-app-samples/tree/main/nextjs-go-google_ucp) | Google UCP デモ (AI エージェントコマース) |
+| [dns-server](/examples/dns-server) | PowerDNS + CRUD API で個人 DNS ホスティング |
+| [line-api-mock](/examples/line-api-mock) | LINE Messaging API のローカル開発用モック (Webhook エミュレーション) |
+| [slurm-rest-api](/examples/slurm-rest-api) | Slurm 単一ノードクラスター + REST API (JWT 認証) |
+| [nextjs-go-google_ucp](/examples/nextjs-go-google_ucp) | Google UCP デモ (AI エージェントコマース) |
 | [hydra-python-api](https://github.com/crowdy/conoha-cli-app-samples/tree/main/hydra-python-api) | Ory Hydra で OAuth2 認可サーバーを自前運用 |
 
 → [全 50+ サンプルを一覧する](https://github.com/crowdy/conoha-cli-app-samples)
