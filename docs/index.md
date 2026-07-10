@@ -28,7 +28,7 @@ features:
 
 ## 何が作れる？
 
-[crowdy/conoha-cli-app-samples](https://github.com/crowdy/conoha-cli-app-samples) には **50+ のサンプル** が揃っています。すべて `git clone` → `conoha app deploy` だけで HTTPS 付きで起動します。
+[crowdy/conoha-cli-app-samples](https://github.com/crowdy/conoha-cli-app-samples) には **58 のサンプル** が揃っています。ほとんどが `git clone` → `conoha app deploy` だけで HTTPS 付きで起動します（一部は `--no-proxy` やスクリプト方式）。
 
 ### AI / GPU
 
@@ -49,12 +49,14 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 
 | サンプル | できること |
 |---|---|
-| [gitea](https://github.com/crowdy/conoha-cli-app-samples/tree/main/gitea) | OIDC 認証付きの自前 Git ホスティング |
+| [gitea](/examples/gitea) | OIDC 認証付きの自前 Git ホスティング |
 | [supabase-selfhost](/examples/supabase-selfhost) | Supabase をフルセット (Studio + Kong + GoTrue + PostgREST) |
 | [immich](/examples/immich) | Google フォト代替の写真バックアップ |
 | [outline](/examples/outline) | Notion 風チームナレッジベース (OIDC 認証付き) |
-| [ghost-blog](https://github.com/crowdy/conoha-cli-app-samples/tree/main/ghost-blog) | Ghost + MySQL でブログ運営 |
+| [ghost-blog](/examples/ghost-blog) | Ghost + MySQL でブログ運営 |
 | [plausible-analytics](/examples/plausible-analytics) | プライバシー重視の Web アナリティクス |
+| [strapi-postgresql](/examples/strapi-postgresql) | Strapi ヘッドレス CMS + PostgreSQL |
+| [meilisearch](/examples/meilisearch) | 高速な全文検索エンジン (Meilisearch) |
 
 ### 開発インフラ・運用
 
@@ -66,6 +68,11 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 | [prometheus-grafana](/examples/prometheus-grafana) | メトリクス監視・可視化スタック |
 | [quickwit-otel](/examples/quickwit-otel) | OpenTelemetry ログ・トレース基盤 + Grafana |
 | [uptime-kuma](/examples/uptime-kuma) | セルフホスティング稼働監視 |
+| [chatops-deploy](/examples/chatops-deploy) | PR コメント `/deploy` で GitHub Actions からデプロイ (ChatOps) |
+| [multi-env-deploy](/examples/multi-env-deploy) | staging / production のマルチ環境デプロイパターン |
+| [gitops-pipeline](/examples/gitops-pipeline) | main への push で自動デプロイする GitOps パイプライン |
+| [hermes-agent](/examples/hermes-agent) | LLM エージェントゲートウェイ + ダッシュボード |
+| [personal-dashboard](/examples/personal-dashboard) | 時計・天気・カレンダーの自分用ダッシュボード (no-proxy + Cloudflare Origin CA) |
 
 ### フルスタックウェブ
 
@@ -74,10 +81,11 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 | [nextjs-fastapi-postgresql](/examples/nextjs-fastapi-postgresql) | Next.js + FastAPI + PostgreSQL の CRUD ひな型 |
 | [nextjs-fastapi-clerk-stripe](/examples/nextjs-fastapi-clerk-stripe) | Clerk 認証 + Stripe サブスクの SaaS デモ (マルチサブドメイン) |
 | [rails-mercari](/examples/rails-mercari) | Rails で作るメルカリ風マーケットプレイス (OIDC 認証 + Sidekiq) |
-| [django-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/django-postgresql) | Django ORM + 管理画面 |
-| [spring-boot-postgresql](https://github.com/crowdy/conoha-cli-app-samples/tree/main/spring-boot-postgresql) | Spring Boot + JPA CRUD |
+| [django-postgresql](/examples/django-postgresql) | Django ORM + 管理画面 |
+| [spring-boot-postgresql](/examples/spring-boot-postgresql) | Spring Boot + JPA CRUD |
 | [bun-elysia-chat](/examples/bun-elysia-chat) | Bun + Elysia の WebSocket リアルタイムチャット |
 | [hono-drizzle-postgresql](/examples/hono-drizzle-postgresql) | Hono + Drizzle REST API + Swagger UI |
+| [sendgrid-invitation](/examples/sendgrid-invitation) | SendGrid で招待メールを送る Next.js + FastAPI |
 
 ### ちょっと変わったもの
 
@@ -87,9 +95,20 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 | [line-api-mock](/examples/line-api-mock) | LINE Messaging API のローカル開発用モック (Webhook エミュレーション) |
 | [slurm-rest-api](/examples/slurm-rest-api) | Slurm 単一ノードクラスター + REST API (JWT 認証) |
 | [nextjs-go-google_ucp](/examples/nextjs-go-google_ucp) | Google UCP デモ (AI エージェントコマース) |
-| [hydra-python-api](https://github.com/crowdy/conoha-cli-app-samples/tree/main/hydra-python-api) | Ory Hydra で OAuth2 認可サーバーを自前運用 |
+| [hydra-python-api](/examples/hydra-python-api) | Ory Hydra で OAuth2 認可サーバーを自前運用 |
+| [line-cli-go](/examples/line-cli-go) | line-api-mock を操作する Go 製 CLI クライアント |
+| [opencascade-fem](/examples/opencascade-fem) | CAD → CAE → 3D 可視化 (OpenCascade FEM, SSE + WebGL) |
 
-→ [全 50+ サンプルを一覧する](https://github.com/crowdy/conoha-cli-app-samples)
+### Kubernetes / 仮想化
+
+1 台の VPS の中で k8s / VM を動かす。
+
+| サンプル | できること |
+|---|---|
+| [kubevirt-provisioner](/examples/kubevirt-provisioner) | ブラウザから VM を作成・操作 (k3s + KubeVirt, ハードウェア KVM) |
+| [vcluster](/examples/vcluster) | マルチテナント仮想 Kubernetes (k3s + vCluster) |
+
+→ [全 58 サンプルを一覧する](https://github.com/crowdy/conoha-cli-app-samples)
 
 ## 5ステップでデプロイ
 
