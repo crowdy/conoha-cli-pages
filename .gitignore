@@ -15,6 +15,7 @@ id_ed25519*
 
 # Working memos / handoff notes
 docs/memory/
+docs/superpowers/
 
 # Build artifacts
 node_modules/
