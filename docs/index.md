@@ -54,18 +54,18 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 | [immich](/examples/immich) | Google フォト代替の写真バックアップ |
 | [outline](/examples/outline) | Notion 風チームナレッジベース (OIDC 認証付き) |
 | [ghost-blog](https://github.com/crowdy/conoha-cli-app-samples/tree/main/ghost-blog) | Ghost + MySQL でブログ運営 |
-| [plausible-analytics](https://github.com/crowdy/conoha-cli-app-samples/tree/main/plausible-analytics) | プライバシー重視の Web アナリティクス |
+| [plausible-analytics](/examples/plausible-analytics) | プライバシー重視の Web アナリティクス |
 
 ### 開発インフラ・運用
 
 | サンプル | できること |
 |---|---|
 | [coolify](/examples/coolify) / [dokploy](/examples/dokploy) | セルフホスティング PaaS (Heroku/Vercel 代替) |
-| [github-actions-runner](https://github.com/crowdy/conoha-cli-app-samples/tree/main/github-actions-runner) | セルフホスト Actions Runner (GPU 利用も可) |
-| [github-pr-doc-reviewer](https://github.com/crowdy/conoha-cli-app-samples/tree/main/github-pr-doc-reviewer) | PR の spec / ADR / glossary 整合性を Claude が自動レビュー |
-| [prometheus-grafana](https://github.com/crowdy/conoha-cli-app-samples/tree/main/prometheus-grafana) | メトリクス監視・可視化スタック |
-| [quickwit-otel](https://github.com/crowdy/conoha-cli-app-samples/tree/main/quickwit-otel) | OpenTelemetry ログ・トレース基盤 + Grafana |
-| [uptime-kuma](https://github.com/crowdy/conoha-cli-app-samples/tree/main/uptime-kuma) | セルフホスティング稼働監視 |
+| [github-actions-runner](/examples/github-actions-runner) | セルフホスト Actions Runner (GPU 利用も可) |
+| [github-pr-doc-reviewer](/examples/github-pr-doc-reviewer) | PR の spec / ADR / glossary 整合性を Claude が自動レビュー |
+| [prometheus-grafana](/examples/prometheus-grafana) | メトリクス監視・可視化スタック |
+| [quickwit-otel](/examples/quickwit-otel) | OpenTelemetry ログ・トレース基盤 + Grafana |
+| [uptime-kuma](/examples/uptime-kuma) | セルフホスティング稼働監視 |
 
 ### フルスタックウェブ
 

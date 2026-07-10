@@ -84,6 +84,9 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
             { text: 'Supabase Self-host', link: '/examples/supabase-selfhost' },
             { text: 'Immich (写真管理)', link: '/examples/immich' },
             { text: 'MinIO + n8n', link: '/examples/minio-n8n' },
+            { text: 'Strapi + PostgreSQL (Headless CMS)', link: '/examples/strapi-postgresql' },
+            { text: 'Meilisearch (全文検索)', link: '/examples/meilisearch' },
+            { text: 'Plausible Analytics', link: '/examples/plausible-analytics' },
           ],
         },
         {
@@ -91,6 +94,16 @@ export const ja: LocaleSpecificConfig<DefaultTheme.Config> = {
           items: [
             { text: 'Coolify (PaaS)', link: '/examples/coolify' },
             { text: 'Dokploy (PaaS, Swarm)', link: '/examples/dokploy' },
+            { text: 'GitHub Actions Runner', link: '/examples/github-actions-runner' },
+            { text: 'GitHub PR ドキュメントレビュー', link: '/examples/github-pr-doc-reviewer' },
+            { text: 'Prometheus + Grafana', link: '/examples/prometheus-grafana' },
+            { text: 'Quickwit + OpenTelemetry', link: '/examples/quickwit-otel' },
+            { text: 'Uptime Kuma (稼働監視)', link: '/examples/uptime-kuma' },
+            { text: 'ChatOps デプロイ', link: '/examples/chatops-deploy' },
+            { text: 'マルチ環境デプロイ', link: '/examples/multi-env-deploy' },
+            { text: 'GitOps パイプライン', link: '/examples/gitops-pipeline' },
+            { text: 'Hermes エージェント', link: '/examples/hermes-agent' },
+            { text: 'パーソナルダッシュボード', link: '/examples/personal-dashboard' },
           ],
         },
         {
