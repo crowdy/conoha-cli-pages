@@ -66,10 +66,10 @@ When adding a page under `docs/examples/` for a sample that exists in
    `compose.yml` excerpt, ハマりどころ, and カスタマイズ sections; compact
    pages omit them and lean on the upstream README.
 3. **Sidebar**: register in `docs/.vitepress/config/ja.ts` under the
-   matching category. The eight target categories are スターター /
-   Web フレームワーク / フルスタックウェブ / AI / GPU / セルフホスティング SaaS
-   / 開発インフラ・運用 / アーキテクチャパターン / ちょっと変わったもの (see
-   `docs/superpowers/specs/2026-06-05-app-samples-reflection-design.md`).
+   matching category. Its sidebar definition is the authoritative list of
+   categories: `スターター`, `Webフレームワーク`, `フルスタックウェブ`,
+   `AI / GPU`, `セルフホスティング SaaS`, `開発インフラ・運用`,
+   `アーキテクチャパターン`, `Kubernetes / 仮想化`, `ちょっと変わったもの`.
    Do not create empty category sections — introduce a category only when
    its first page lands.
 4. **index.md rewire**: if `docs/index.md` already links to
