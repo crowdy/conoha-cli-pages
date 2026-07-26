@@ -28,7 +28,7 @@ features:
 
 ## 何が作れる？
 
-[crowdy/conoha-cli-app-samples](https://github.com/crowdy/conoha-cli-app-samples) には **58 のサンプル** が揃っています。ほとんどが `git clone` → `conoha app deploy` だけで HTTPS 付きで起動します（一部は `--no-proxy` やスクリプト方式）。
+[crowdy/conoha-cli-app-samples](https://github.com/crowdy/conoha-cli-app-samples) には **59 のサンプル** が揃っています。ほとんどが `git clone` → `conoha app deploy` だけで HTTPS 付きで起動します（一部は `--no-proxy` やスクリプト方式）。
 
 ### AI / GPU
 
@@ -53,6 +53,7 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 | [supabase-selfhost](/examples/supabase-selfhost) | Supabase をフルセット (Studio + Kong + GoTrue + PostgREST) |
 | [immich](/examples/immich) | Google フォト代替の写真バックアップ |
 | [outline](/examples/outline) | Notion 風チームナレッジベース (OIDC 認証付き) |
+| [buzz](/examples/buzz) | 人間 + AI エージェント協働ワークスペース (Nostr リレー)。Claude を常駐参加者にして @mention 応答 |
 | [ghost-blog](/examples/ghost-blog) | Ghost + MySQL でブログ運営 |
 | [plausible-analytics](/examples/plausible-analytics) | プライバシー重視の Web アナリティクス |
 | [strapi-postgresql](/examples/strapi-postgresql) | Strapi ヘッドレス CMS + PostgreSQL |
@@ -108,7 +109,7 @@ L4 GPU フレーバー (`g2l-t-c20m128g1-l4`) + `conoha app deploy` だけ。
 | [kubevirt-provisioner](/examples/kubevirt-provisioner) | ブラウザから VM を作成・操作 (k3s + KubeVirt, ハードウェア KVM) |
 | [vcluster](/examples/vcluster) | マルチテナント仮想 Kubernetes (k3s + vCluster) |
 
-→ [全 58 サンプルを一覧する](https://github.com/crowdy/conoha-cli-app-samples)
+→ [全 59 サンプルを一覧する](https://github.com/crowdy/conoha-cli-app-samples)
 
 ## 5ステップでデプロイ
 
